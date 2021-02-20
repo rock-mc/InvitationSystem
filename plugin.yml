@@ -1,0 +1,5 @@
+name: Invitation_system
+main: com.rock_mc.invitation_system.Main
+version: 1.0
+description: A minecraft plugin for invitation only
+author: CodingMan

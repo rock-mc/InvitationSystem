@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="output">
+    <output-path>$PROJECT_DIR$/out/</output-path>
+    <root id="archive" name="invitation_system.jar">
+      <element id="module-output" name="Invitation_system" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+    </root>
+  </artifact>
+</component>
