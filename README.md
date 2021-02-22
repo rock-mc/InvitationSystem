@@ -6,30 +6,32 @@ A Minecraft plugin for invitation only server.
 ## invit (on/off)
 如果打開，插件只會讓在白名單上的玩家登入。  
 如果關閉，插件會讓任何不在黑名單上的玩家登入。  
-If on, the plugin will only allow the player who is on whitelist login.  
-If off, the plugin will allow any player who is not in blacklist login.
-## invit set (who/all) (How many invitation)
+If on, InvitationSystem will only allow the player is in whitelist login.  
+When the player is both not in whitelist and blacklist, InvitationSystem will ask the player to input invitation code.  
+If off, InvitationSystem will allow any player who is not in blacklist login.
+## invit set (player/all) (How many invitation)
 設定該玩家的邀請配額。  
-Set (who/all) invitation quota to (How many invitation).
+Set (player/all) invitation quota to (How many invitation).
 ## invit gencode
-產生邀請碼，並使你的邀請配額減 1。  
+產生邀請碼，並使玩家的邀請配額減 1。  
 Get invitation code, quota is reduced by 1.
 ## invit input (invitation code)
 輸入邀請碼。  
-如果你並沒有在黑名單與白名單上，插件會要求你輸入邀請碼。  
-如果成功，你會被加入至白名單中。  
+如果玩家並沒有在黑名單與白名單上，插件會要求玩家輸入邀請碼。  
+如果成功，玩家會被加入至白名單中。  
 如果失敗，將會被請出伺服器。  
-Input (invitation code), when the player first time into server.  
+Input (invitation code).  
+When the player is both not in whitelist and blacklist, InvitationSystem will ask the player to input invitation code.  
 If success, the player will add to the whitelist.
 If fail, the player will be kicked by plugin.
-## invit block (who) [days]
+## invit block (player) [days]
 將該玩家加入到黑名單中。  
 如果沒有設定天數，該玩家視為永久剔除，該玩家推薦人會被加入黑名單中 3 天。  
-Add (who) to blacklist
-If no input [days], (who)'s referrer will also be added to blacklist for 3 days.
-## invit unblock [who]
+Add the player to blacklist
+If no input [days], the referrer of the player will also be added to blacklist for 3 days.
+## invit unblock [player]
 將該玩家從黑名單中移除。  
-Remove (who) from blacklist.  
-## invit info (who)
+Remove the player from blacklist.  
+## invit info (player)
 顯示該玩家是否在黑白名單，邀請配額，推薦人與推薦玩家。  
-Show the invitation quota and it's referrer of (who)  
+Show the invitation quota and the referrer of the player.  
