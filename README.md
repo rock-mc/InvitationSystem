@@ -18,7 +18,7 @@ Get invitation code, quota is reduced by 1.
 輸入邀請碼。  
 如果你並沒有在黑名單與白名單上，插件會要求你輸入邀請碼。  
 如果成功，你會被加入至白名單中。  
-Input (invitation code), when new player first time into server.
+Input (invitation code), when new player first time into server.  
 If success, the player will add to the whitelist.
 ## invit block (who) [days]
 將該玩家加入到黑名單中。  
