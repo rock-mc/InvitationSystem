@@ -1,5 +1,11 @@
-name: Invitation_system
+name: InvitationSystem
 main: com.rock_mc.invitation_system.Main
 version: 1.0
 description: A minecraft plugin for invitation only
 author: CodingMan
+prefix: InvitSys
+commands:
+  invits:
+    description: Show help of InvitationSystem
+    usage: /invits
+    default: true
