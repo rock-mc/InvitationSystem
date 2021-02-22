@@ -12,11 +12,10 @@ Get invitation code, quota is reduced by 1.
 ## invit input (invitation code)
 Input (invitation code), when new player first time into server.
 If success, the player will add to the whitelist.
-## invit block (who)
-block (who) and it's referrer will be locked for 3 days.
+## invit block (who) [days]
+Add (who) to blacklist
+If no input [days], (who)'s referrer will also be added to blacklist for 3 days.
 ## invit unblock [who]
-unblock (who) and it's referrer will be unlocked if in lock.
-## invit lock (who) (days)
-Lock (who) for (days) days
+unblock (who) and it's referrer will remove from blacklist.
 ## invit info (who)
 Show the invitation quota and it's referrer of (who)
