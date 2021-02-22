@@ -1,5 +1,6 @@
-# invitation system
-A Minecraft plugin for invitation only server
+# InvitationSystem
+讓 Minecraft 伺服器實現邀請制的管理插件。  
+A Minecraft plugin for invitation only server.
 
 # Command
 ## invit (on/off)
