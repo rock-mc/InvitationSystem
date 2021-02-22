@@ -30,7 +30,7 @@ If fail, the player will be kicked by plugin.
 如果沒有設定天數，該玩家視為永久剔除，該玩家推薦人會被加入黑名單中 3 天。  
 Add the player to blacklist
 If no input [days], the referrer of the player will also be added to blacklist for 3 days.
-## invit unblock [player]
+## invit unblock (player)
 將該玩家從黑名單中移除。  
 Remove the player from blacklist.  
 ## invit info (player)
