@@ -13,19 +13,30 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-//        final Player player = event.getPlayer();
-//        final String name = player.getName();
-//        final String uid = player.getUniqueId().toString();
-//
-//        for(int i = 0 ; i < 15 ; i++){
-//            Log.cur_p(player, ChatColor.GREEN + name + ChatColor.WHITE + "! 您尚未通過認證", ChatColor.RED, "請輸入邀請碼");
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        player.kickPlayer("未通過認證");
+        final Player player = event.getPlayer();
+        final String name = player.getName();
+        final String uid = player.getUniqueId().toString();
+
+        if(player.isOp()){
+            return;
+        }
+        if(InvitationSystem.white_list.contains(uid)){
+            return;
+        }
+        if(InvitationSystem.black_list.contains(uid)){
+            player.kickPlayer("抱歉!你被列為黑名單!");
+            return;
+        }
+
+        for(int i = 0 ; i < 15 ; i++){
+            Log.cur_p(player, ChatColor.GREEN + name + ChatColor.WHITE + "! 您尚未通過認證", ChatColor.RED, "請輸入邀請碼");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        player.kickPlayer("未通過認證");
     }
 
 //
