@@ -5,6 +5,7 @@ A Minecraft plugin for invitation only server.
 # Command
 ## invit (on/off)
 如果打開，插件只會讓在白名單上的玩家登入。  
+當玩家沒有在黑名單與白名單上，插件將會請玩家輸入邀請碼。  
 如果關閉，插件會讓任何不在黑名單上的玩家登入。  
 If on, InvitationSystem will only allow the player is in whitelist login.  
 When the player is both not in whitelist and blacklist, InvitationSystem will ask the player to input invitation code.  
