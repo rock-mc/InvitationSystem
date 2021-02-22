@@ -18,7 +18,7 @@ Get invitation code, quota is reduced by 1.
 輸入邀請碼。  
 如果你並沒有在黑名單與白名單上，插件會要求你輸入邀請碼。  
 如果成功，你會被加入至白名單中。  
-如果失敗，將會被請出伺服器。
+如果失敗，將會被請出伺服器。  
 Input (invitation code), when the player first time into server.  
 If success, the player will add to the whitelist.
 If fail, the player will be kicked by plugin.
@@ -32,4 +32,4 @@ If no input [days], (who)'s referrer will also be added to blacklist for 3 days.
 Remove (who) from blacklist.  
 ## invit info (who)
 顯示該玩家是否在黑白名單，邀請配額，推薦人與推薦玩家。  
-Show the invitation quota and it's referrer of (who)
+Show the invitation quota and it's referrer of (who)  
