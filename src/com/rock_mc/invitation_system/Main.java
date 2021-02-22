@@ -12,14 +12,8 @@ public class Main extends JavaPlugin {
         Log.server("Enable", "Active");
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        this.getCommand("invits").setExecutor(new PlayerCommand());
 
         Log.server("Enable", "Complete");
     }
-//    @EventHandler
-//    public void onLogin(PlayerLoginEvent e) {
-//        Player player = e.getPlayer();
-//        String uid = player.getUniqueId().toString();
-//
-//
-//    }
 }
