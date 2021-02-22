@@ -3,6 +3,8 @@ A Minecraft plugin for invitation only server
 
 # Command
 ## invit (on/off)
+If on, the plugin will NOT allow any player who does not has the invitation code.
+If off, the plugin will allow any player who is not in blacklist login.
 ## invit set (who/all) (How many invitation)
 Set (who/all) invitation quota to (How many invitation).
 ## invit gencode
