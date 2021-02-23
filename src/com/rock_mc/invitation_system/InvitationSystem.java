@@ -24,13 +24,13 @@ public class InvitationSystem {
         all_list.extend(blacklist);
     }
 
-    public static boolean add_whitelist(Player player) throws IOException {
+    public static boolean addWhitelist(Player player) throws IOException {
         PlayerInfo playerInfo = new PlayerInfo(player);
         whitelist.add(playerInfo);
         return true;
     }
 
-    public static boolean add_whitelist(Player player, String invitation_code) throws IOException {
+    public static boolean addWhitelist(Player player, String invitation_code) throws IOException {
 
         boolean result = false;
 

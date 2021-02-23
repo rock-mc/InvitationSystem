@@ -1,9 +1,6 @@
 package com.rock_mc.invitation_system;
 
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +17,7 @@ public class PlayerListener implements Listener {
         final String uid = player.getUniqueId().toString();
 
         if(player.isOp()){
-            InvitationSystem.add_whitelist(player);
+            InvitationSystem.addWhitelist(player);
             return;
         }
         if(InvitationSystem.whitelist.contains(uid)){
