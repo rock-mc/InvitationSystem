@@ -18,12 +18,13 @@ public class PlayerListener implements Listener {
         final String uid = player.getUniqueId().toString();
 
         if(player.isOp()){
+            InvitationSystem.add_whitelist(player);
             return;
         }
-        if(InvitationSystem.white_list.contains(uid)){
+        if(InvitationSystem.whitelist.contains(uid)){
             return;
         }
-        if(InvitationSystem.black_list.contains(uid)){
+        if(InvitationSystem.blacklist.contains(uid)){
             player.kickPlayer("抱歉!你被列為黑名單!");
             return;
         }

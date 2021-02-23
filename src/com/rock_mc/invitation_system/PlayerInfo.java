@@ -7,15 +7,18 @@ import java.util.ArrayList;
 public class PlayerInfo {
     public String name;
     public String uid;
-    public PlayerInfo parent;
-    public ArrayList<PlayerInfo> child;
+    public String parent_id;
+    public ArrayList<String> child_id;
     public int invitation_quota;
+    public ArrayList<String> invitation_code;
 
     public PlayerInfo(Player player) {
         name = player.getName();
         uid = player.getUniqueId().toString();
-        parent = null;
-        child = null;
+        parent_id = null;
+        child_id = null;
         invitation_quota = 0;
+        invitation_code = new ArrayList<String>();
     }
+
 }
