@@ -2,6 +2,8 @@ package com.rock_mc.invitation_system;
 
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+
 public class InvitationSystem {
 
     public static final String APP_NAME = "InvitationSystem";
@@ -22,13 +24,13 @@ public class InvitationSystem {
         all_list.extend(blacklist);
     }
 
-    public static boolean add_whitelist(Player player){
+    public static boolean add_whitelist(Player player) throws IOException {
         PlayerInfo playerInfo = new PlayerInfo(player);
         whitelist.add(playerInfo);
         return true;
     }
 
-    public static boolean add_whitelist(Player player, String invitation_code){
+    public static boolean add_whitelist(Player player, String invitation_code) throws IOException {
 
         boolean result = false;
 

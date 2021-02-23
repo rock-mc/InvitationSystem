@@ -10,9 +10,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.io.IOException;
+
 public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         final Player player = event.getPlayer();
         final String name = player.getName();
         final String uid = player.getUniqueId().toString();

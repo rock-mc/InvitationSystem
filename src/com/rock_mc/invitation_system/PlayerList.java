@@ -1,42 +1,70 @@
 package com.rock_mc.invitation_system;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerList {
-    public HashMap<String, PlayerInfo> player_list;
+    public HashMap<String, PlayerInfo> playerList;
+    private ObjectMapper objectMapper;
+    private String filePath;
 
-    public PlayerList(String load_file) {
-        player_list = new HashMap<>();
+    public PlayerList(String loadFile) {
+        filePath = loadFile;
+
+        playerList = new HashMap<>();
+        objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     public PlayerList() {
-        player_list = new HashMap<>();
+
+        filePath = null;
+
+        playerList = new HashMap<>();
+        objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public void add(PlayerInfo player_info) {
-        player_list.put(player_info.uid, player_info);
+    public void add(PlayerInfo player_info) throws IOException  {
+
+        playerList.put(player_info.uid, player_info);
+
+        save();
     }
 
-    public void add(PlayerInfo player_info, PlayerInfo parent_info) {
+    public void add(PlayerInfo player_info, PlayerInfo parent_info) throws IOException {
 
         parent_info.child_id.add(player_info.uid);
         player_info.parent_id = parent_info.uid;
 
-        player_list.put(player_info.uid, player_info);
+        playerList.put(player_info.uid, player_info);
+
+        save();
+    }
+    private void save() throws IOException {
+        if(filePath == null){
+            return;
+        }
+
+        String json_str = objectMapper.writeValueAsString(playerList);
+
+        Util.writeFile(filePath, json_str);
     }
 
     public void remove(PlayerInfo player_info) {
-        player_list.remove(player_info.uid);
+        playerList.remove(player_info.uid);
     }
 
     public boolean contains(String player_uid) {
-        return player_list.containsKey(player_uid);
+        return playerList.containsKey(player_uid);
     }
 
     public PlayerInfo find_code_owner(String invitation_code) {
         PlayerInfo result = null;
-        for (Map.Entry<String, PlayerInfo> entry : player_list.entrySet()) {
+        for (Map.Entry<String, PlayerInfo> entry : playerList.entrySet()) {
             PlayerInfo temp_player_info = entry.getValue();
             if (temp_player_info.invitation_code.contains(invitation_code)) {
                 result = temp_player_info;
@@ -48,6 +76,6 @@ public class PlayerList {
     }
 
     public void extend(PlayerList playerList) {
-        this.player_list.putAll(playerList.player_list);
+        this.playerList.putAll(playerList.playerList);
     }
 }
