@@ -3,15 +3,19 @@ package com.rock_mc.invitation_system;
 import org.bukkit.entity.Player;
 
 public class InvitationSystem {
+
+    public static final String APP_NAME = "InvitationSystem";
+    public static final int NEW_QUOTA = 2;
+
     public static PlayerList whitelist;
     public static PlayerList blacklist;
     public static PlayerList all_list;
     static {
 
-        Util.mkdir("InvitationSystem");
+        Util.mkdir(APP_NAME);
 
-        whitelist = new PlayerList("InvitationSystem/whitelist.json");
-        blacklist = new PlayerList("InvitationSystem/blacklist.json");
+        whitelist = new PlayerList(APP_NAME + "/whitelist.json");
+        blacklist = new PlayerList(APP_NAME + "/blacklist.json");
 
         all_list = new PlayerList();
         all_list.extend(whitelist);

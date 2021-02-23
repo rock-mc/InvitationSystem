@@ -17,7 +17,7 @@ public class PlayerInfo {
         uid = player.getUniqueId().toString();
         parent_id = null;
         child_id = null;
-        invitation_quota = 0;
+        invitation_quota = InvitationSystem.NEW_QUOTA;
         invitation_code = new ArrayList<String>();
     }
 

@@ -8,11 +8,9 @@ public class PlayerList {
 
     public PlayerList(String load_file) {
         player_list = new HashMap<>();
-
     }
 
     public PlayerList() {
-
         player_list = new HashMap<>();
     }
 
