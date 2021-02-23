@@ -12,12 +12,17 @@ public class InvitationSystem {
     public static PlayerList whitelist;
     public static PlayerList blacklist;
     public static PlayerList all_list;
-    static {
 
+    public static void init(){
         Util.mkdir(APP_NAME);
 
-        whitelist = new PlayerList(APP_NAME + "/whitelist.json");
-        blacklist = new PlayerList(APP_NAME + "/blacklist.json");
+        try {
+            whitelist = new PlayerList(APP_NAME + "/whitelist.json");
+            blacklist = new PlayerList(APP_NAME + "/blacklist.json");
+        } catch (Exception e) {
+            whitelist = new PlayerList();
+            blacklist = new PlayerList();
+        }
 
         all_list = new PlayerList();
         all_list.extend(whitelist);

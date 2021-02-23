@@ -1,12 +1,11 @@
 package com.rock_mc.invitation_system;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
     @Override
@@ -17,6 +16,8 @@ public class Main extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         this.getCommand("invits").setExecutor(new PlayerCommand());
+
+        InvitationSystem.init();
 
         Log.server("Enable", "Complete");
     }
@@ -36,18 +37,14 @@ public class Main extends JavaPlugin {
         p2.name = "test_name2";
         p2.uid = "xxxxxxxx2";
 
-        ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        String json = objectMapper.writeValueAsString(p);
-
-        System.out.println(json);
-
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(p));
 
         PlayerList playerList = new PlayerList();
         playerList.add(p);
         playerList.add(p1);
         playerList.add(p2);
 
-        json = objectMapper.writeValueAsString(playerList);
-        System.out.println(json);
+        System.out.println(gson.toJson(playerList));
     }
 }
