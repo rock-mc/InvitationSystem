@@ -1,51 +1,39 @@
 package com.rock_mc.invitation_system;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerList {
-    public HashMap<String, PlayerInfo> playerList;
+    public ArrayList<String> playerList;
     private String filePath;
 
     public PlayerList(String loadFile) throws Exception {
         filePath = loadFile;
 
-
         Path p = Path.of(loadFile);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-//            playerList = objectMapper.readValue(fileString, HashMap.class);
+            playerList = new Gson().fromJson(fileString, ArrayList.class);
         }
         else{
-            playerList = new HashMap<>();
+            playerList = new ArrayList<>();
         }
     }
 
     public PlayerList() {
-
         filePath = null;
-
-        playerList = new HashMap<>();
-//        objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        playerList = new ArrayList<>();
     }
 
-    public void add(PlayerInfo player_info) throws IOException {
-
-        playerList.put(player_info.uid, player_info);
-
-        save();
-    }
-
-    public void add(PlayerInfo player_info, PlayerInfo parent_info) throws IOException {
-
-        parent_info.childId.add(player_info.uid);
-        player_info.parentId = parent_info.uid;
-
-        playerList.put(player_info.uid, player_info);
-
+    public void add(String player_uid) throws IOException {
+        playerList.add(player_uid);
         save();
     }
 
@@ -54,33 +42,17 @@ public class PlayerList {
             return;
         }
 
-//        String json_str = objectMapper.writeValueAsString(playerList);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json_str = gson.toJson(playerList);
 
-//        Util.writeFile(filePath, json_str);
+        Util.writeFile(filePath, json_str);
     }
 
-    public void remove(PlayerInfo player_info) {
-        playerList.remove(player_info.uid);
+    public void remove(String player_uid) {
+        playerList.remove(player_uid);
     }
 
     public boolean contains(String player_uid) {
-        return playerList.containsKey(player_uid);
-    }
-
-    public PlayerInfo find_code_owner(String invitation_code) {
-        PlayerInfo result = null;
-        for (Map.Entry<String, PlayerInfo> entry : playerList.entrySet()) {
-            PlayerInfo temp_player_info = entry.getValue();
-            if (temp_player_info.invitationCode.contains(invitation_code)) {
-                result = temp_player_info;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    public void extend(PlayerList playerList) {
-        this.playerList.putAll(playerList.playerList);
+        return playerList.contains(player_uid);
     }
 }

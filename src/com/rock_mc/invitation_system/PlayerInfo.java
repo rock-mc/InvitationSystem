@@ -15,7 +15,6 @@ public class PlayerInfo {
     public int invitationQuota;
     public ArrayList<String> invitationCode;
 
-
     public PlayerInfo() {
         name = null;
         uid = null;
