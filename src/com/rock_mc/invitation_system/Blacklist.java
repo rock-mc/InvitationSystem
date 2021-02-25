@@ -7,14 +7,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class PlayerList {
-    public ArrayList<String> playerList;
+public class Blacklist {
+    public ArrayList<Prisoner> playerList;
     private String filePath;
 
-    public PlayerList(String loadFile) throws Exception {
+    public Blacklist(String loadFile) throws Exception {
         filePath = loadFile;
 
         Path p = Path.of(loadFile);
@@ -27,13 +25,16 @@ public class PlayerList {
         }
     }
 
-    public PlayerList() {
+    public Blacklist() {
         filePath = null;
         playerList = new ArrayList<>();
     }
 
-    public void add(String player_uid) throws IOException {
-        playerList.add(player_uid);
+    public void add(String player_uid, int day) throws IOException {
+
+        Prisoner prisoner = new Prisoner(player_uid, day);
+
+        playerList.add(prisoner);
         save();
     }
 
@@ -49,10 +50,29 @@ public class PlayerList {
     }
 
     public void remove(String player_uid) {
+
+        Prisoner current_prisoner = null;
+        for(Prisoner prisoner : playerList){
+            if(prisoner.uid.equals(player_uid)){
+                current_prisoner = prisoner;
+                break;
+            }
+        }
+        if (current_prisoner == null){
+            return;
+        }
+
         playerList.remove(player_uid);
     }
 
     public boolean contains(String player_uid) {
-        return playerList.contains(player_uid);
+
+        for(Prisoner prisoner : playerList){
+            if(prisoner.uid.equals(player_uid)){
+                return true;
+            }
+        }
+
+        return false;
     }
 }
