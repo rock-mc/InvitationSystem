@@ -2,14 +2,17 @@ package com.rock_mc.invitation_system;
 
 public class Prisoner {
     public String uid;
-    public long expiryDate;
+    public long expiryTime;
     public Prisoner(String uid, int day){
         this.uid = uid;
 
-        setExpiryDate(day);
+        setExpiryTime(day);
     }
-    public void setExpiryDate(int day){
-        expiryDate = java.time.Instant.now().getEpochSecond();
-        expiryDate += day * Util.DAY;
+    public void setExpiryTime(int day){
+        expiryTime = java.time.Instant.now().getEpochSecond();
+        expiryTime += day * Util.DAY;
+    }
+    public boolean isExpiry(){
+        return java.time.Instant.now().getEpochSecond() >= expiryTime;
     }
 }

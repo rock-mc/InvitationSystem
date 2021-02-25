@@ -45,7 +45,7 @@ public class Blacklist {
 
         if(contains(playerUid)){
             Prisoner currentPrisoner = getPrisoner(playerUid);
-            currentPrisoner.setExpiryDate(day);
+            currentPrisoner.setExpiryTime(day);
         }
         else{
             Prisoner prisoner = new Prisoner(playerUid, day);
