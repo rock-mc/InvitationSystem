@@ -5,7 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.io.IOException;
 
@@ -39,15 +41,15 @@ public class PlayerListener implements Listener {
         player.kickPlayer("未通過認證");
     }
 
-//
-//    public void onPlayerLogin(PlayerLoginEvent event) {
-//        final Player player = event.getPlayer();
-//        final String name = player.getName();
-//        final String uid = player.getUniqueId().toString();
-//
-//        Bukkit.broadcastMessage("Welcome to the server!");
-//
-//        Log.cur_p(player, "Your name", name);
-//        Log.cur_p(player, "Your uid", uid);
-//    }
+
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        final Player player = event.getPlayer();
+        final String name = player.getName();
+        final String uid = player.getUniqueId().toString();
+
+        if(!InvitationSystem.blacklist.contains(uid)){
+            return;
+        }
+        player.kickPlayer("抱歉!你被列為黑名單!");
+    }
 }
