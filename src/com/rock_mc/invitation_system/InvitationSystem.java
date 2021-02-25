@@ -9,17 +9,17 @@ public class InvitationSystem {
     public static final String APP_NAME = "InvitationSystem";
     public static final int NEW_QUOTA = 2;
 
-    public static PlayerChain playerChain;
-    public static PlayerList whitelist;
-    public static PlayerList blacklist;
+    public static PlayerData playerData;
+    public static Whitelist whitelist;
+    public static Blacklist blacklist;
 
     public static void init(){
         Util.mkdir("plugins/" + APP_NAME);
 
         try {
-            playerChain = new PlayerChain("plugins/" + APP_NAME + "/playerchain.json");
-            whitelist = new PlayerList("plugins/" + APP_NAME + "/whitelist.json");
-            blacklist = new PlayerList("plugins/" + APP_NAME + "/blacklist.json");
+            playerData = new PlayerData("plugins/" + APP_NAME + "/playerdata.json");
+            whitelist = new Whitelist("plugins/" + APP_NAME + "/whitelist.json");
+            blacklist = new Blacklist("plugins/" + APP_NAME + "/blacklist.json");
         } catch (Exception e) {
             return;
         }
@@ -27,7 +27,7 @@ public class InvitationSystem {
 
     public static boolean addWhitelist(Player player) throws IOException {
         PlayerInfo playerInfo = new PlayerInfo(player);
-        playerChain.add(playerInfo);
+        playerData.add(playerInfo);
         whitelist.add(playerInfo.uid);
         return true;
     }
@@ -35,7 +35,7 @@ public class InvitationSystem {
     public static boolean addWhitelist(Player player, String invitationCode) throws IOException {
 
         PlayerInfo parent = null;
-        for(PlayerInfo p : playerChain.playerInfos){
+        for(PlayerInfo p : playerData.playerList){
             if(p.invitationCode.contains(invitationCode)){
                 parent = p;
                 break;
@@ -48,7 +48,7 @@ public class InvitationSystem {
         parent.childId.add(newPlayer.uid);
         newPlayer.parentId = parent.uid;
 
-        playerChain.add(newPlayer);
+        playerData.add(newPlayer);
         whitelist.add(newPlayer.uid);
 
         return true;

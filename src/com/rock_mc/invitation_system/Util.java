@@ -5,6 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Util {
+
+    static int SEC = 1;
+    static int MIN = 60 * SEC;
+    static int HOUR = 60 * MIN;
+    static int DAY = 24 * HOUR;
+
     static void mkdir(String foler_path){
         File directory = new File(foler_path);
         if (directory.exists()){

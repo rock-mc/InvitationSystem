@@ -8,25 +8,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class PlayerChain {
-    public ArrayList<PlayerInfo> playerInfos;
+public class PlayerData {
+    public ArrayList<PlayerInfo> playerList;
     private String filePath;
-    public PlayerChain(String path) throws IOException {
+    public PlayerData(String path) throws IOException {
         filePath = path;
 
         Path p = Path.of(filePath);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerInfos = new Gson().fromJson(fileString, ArrayList.class);
+            playerList = new Gson().fromJson(fileString, ArrayList.class);
         }
         else {
-            playerInfos = new ArrayList<>();
+            playerList = new ArrayList<>();
         }
     }
     public boolean contains(PlayerInfo playerInfo){
         boolean result = false;
 
-        for(PlayerInfo p : playerInfos){
+        for(PlayerInfo p : playerList){
             if(p.uid.equals(playerInfo.uid)){
                 result = true;
                 break;
@@ -39,7 +39,7 @@ public class PlayerChain {
         if (contains(playerInfo)){
             return;
         }
-        playerInfos.add(playerInfo);
+        playerList.add(playerInfo);
     }
 
     public void save() throws IOException {
@@ -48,7 +48,7 @@ public class PlayerChain {
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json_str = gson.toJson(playerInfos);
+        String json_str = gson.toJson(playerList);
 
         Util.writeFile(filePath, json_str);
     }
