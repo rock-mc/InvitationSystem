@@ -35,11 +35,12 @@ public class PlayerData {
         return result;
     }
 
-    public void add(PlayerInfo playerInfo){
+    public void add(PlayerInfo playerInfo) throws IOException {
         if (contains(playerInfo)){
             return;
         }
         playerList.add(playerInfo);
+        save();
     }
 
     public void save() throws IOException {
