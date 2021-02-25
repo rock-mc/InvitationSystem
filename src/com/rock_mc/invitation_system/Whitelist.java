@@ -30,8 +30,11 @@ public class Whitelist {
         playerList = new ArrayList<>();
     }
 
-    public void add(String player_uid) throws IOException {
-        playerList.add(player_uid);
+    public void add(String playerUid) throws IOException {
+        if (playerList.contains(playerUid)){
+            return;
+        }
+        playerList.add(playerUid);
         save();
     }
 
@@ -46,8 +49,11 @@ public class Whitelist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(String player_uid) {
-        playerList.remove(player_uid);
+    public void remove(String playerUid) {
+        if (!playerList.contains(playerUid)){
+            return;
+        }
+        playerList.remove(playerUid);
     }
 
     public boolean contains(String player_uid) {

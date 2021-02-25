@@ -30,11 +30,27 @@ public class Blacklist {
         playerList = new ArrayList<>();
     }
 
-    public void add(String player_uid, int day) throws IOException {
+    public Prisoner getPrisoner(String playerUid){
+        Prisoner result = null;
+        for(Prisoner prisoner : playerList){
+            if(prisoner.uid.equals(playerUid)){
+                result = prisoner;
+                break;
+            }
+        }
+        return result;
+    }
 
-        Prisoner prisoner = new Prisoner(player_uid, day);
+    public void add(String playerUid, int day) throws IOException {
 
-        playerList.add(prisoner);
+        if(contains(playerUid)){
+            Prisoner currentPrisoner = getPrisoner(playerUid);
+            currentPrisoner.setExpiryDate(day);
+        }
+        else{
+            Prisoner prisoner = new Prisoner(playerUid, day);
+            playerList.add(prisoner);
+        }
         save();
     }
 
@@ -49,30 +65,23 @@ public class Blacklist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(String player_uid) {
+    public void remove(String playerUid) {
 
-        Prisoner current_prisoner = null;
+        Prisoner currentPrisoner = null;
         for(Prisoner prisoner : playerList){
-            if(prisoner.uid.equals(player_uid)){
-                current_prisoner = prisoner;
+            if(prisoner.uid.equals(playerUid)){
+                currentPrisoner = prisoner;
                 break;
             }
         }
-        if (current_prisoner == null){
+        if (currentPrisoner == null){
             return;
         }
 
-        playerList.remove(player_uid);
+        playerList.remove(currentPrisoner);
     }
 
-    public boolean contains(String player_uid) {
-
-        for(Prisoner prisoner : playerList){
-            if(prisoner.uid.equals(player_uid)){
-                return true;
-            }
-        }
-
-        return false;
+    public boolean contains(String playerUid) {
+        return getPrisoner(playerUid) != null;
     }
 }

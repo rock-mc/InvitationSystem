@@ -26,9 +26,9 @@ public class InvitationSystem {
     }
 
     public static boolean addWhitelist(Player player) throws IOException {
-        PlayerInfo playerInfo = new PlayerInfo(player);
-        playerData.add(playerInfo);
-        whitelist.add(playerInfo.uid);
+        PlayerInfo tempPlayer = new PlayerInfo(player);
+        playerData.add(tempPlayer);
+        whitelist.add(tempPlayer.uid);
         return true;
     }
 
