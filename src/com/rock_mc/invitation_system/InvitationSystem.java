@@ -1,6 +1,7 @@
 package com.rock_mc.invitation_system;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 
@@ -8,12 +9,18 @@ public class InvitationSystem {
 
     public static final String APP_NAME = "InvitationSystem";
     public static final int NEW_QUOTA = 2;
+    public static final int MAX_INPUT_CODE_TIME = 15;
+
+    public static Plugin plugin;
 
     public static PlayerData playerData;
     public static Whitelist whitelist;
     public static Blacklist blacklist;
 
-    public static void init(){
+    public static void init(Plugin inputPlugin){
+
+        plugin = inputPlugin;
+
         Util.mkdir("plugins/" + APP_NAME);
 
         try {

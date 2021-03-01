@@ -11,6 +11,7 @@ public class PlayerCommand implements CommandExecutor {
         String cmd = command.getName().toLowerCase();
 
         Log.server("recv cmd", cmd);
+        Log.server("recv args", args);
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
