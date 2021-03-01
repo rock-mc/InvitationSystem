@@ -2,11 +2,13 @@ package com.rock_mc.invitation_system;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerData {
     public ArrayList<PlayerInfo> playerList;
@@ -17,7 +19,7 @@ public class PlayerData {
         Path p = Path.of(filePath);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, ArrayList.class);
+            playerList = new Gson().fromJson(fileString, new TypeToken<List<PlayerInfo>>(){}.getType());
         }
         else {
             playerList = new ArrayList<>();
