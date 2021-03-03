@@ -1,11 +1,13 @@
 package com.rock_mc.invitation_system;
 
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.io.IOException;
@@ -42,23 +44,19 @@ public class PlayerListener implements Listener {
         Log.player(player, name, ChatColor.RED, "請在 15 秒內輸入邀請碼");
         player.setWalkSpeed(0.0F);
 
-        for (int i = 0; i * CHECK_TIME < InvitationSystem.MAX_INPUT_CODE_TIME; i++) {
-            try {
-                Thread.sleep((long) (CHECK_TIME * 1000));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        new CheckThread(player).start();
+    }
 
-            if (InvitationSystem.whitelist.contains(player.getUniqueId().toString())) {
-                break;
-            }
-        }
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onInvitatKick(InvitatKickEvent event){
+        Player player = event.getPlayer();
+//        player.kickPlayer("抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
 
-        resetPlayer(player);
-        if (!InvitationSystem.whitelist.contains(player.getUniqueId().toString())) {
-            player.kickPlayer("抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
-            return;
-        }
+        Bukkit.getScheduler().runTask(InvitationSystem.plugin, new Runnable() {
+            public void run() {
+                player.kickPlayer("抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
+            }
+        });
     }
 
 
