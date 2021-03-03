@@ -25,11 +25,23 @@ public class PlayerData {
             playerList = new ArrayList<>();
         }
     }
-    public boolean contains(PlayerInfo playerInfo){
+    public PlayerInfo findPlayer(String player_uid){
+        PlayerInfo result = null;
+
+        for(PlayerInfo p : playerList){
+            if(p.uid.equals(player_uid)){
+                result = p;
+                break;
+            }
+        }
+
+        return result;
+    }
+    public boolean contains(String player_uid){
         boolean result = false;
 
         for(PlayerInfo p : playerList){
-            if(p.uid.equals(playerInfo.uid)){
+            if(p.uid.equals(player_uid)){
                 result = true;
                 break;
             }
@@ -38,7 +50,7 @@ public class PlayerData {
     }
 
     public void add(PlayerInfo playerInfo) throws IOException {
-        if (contains(playerInfo)){
+        if (contains(playerInfo.uid)){
             return;
         }
         playerList.add(playerInfo);

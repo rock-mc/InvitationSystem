@@ -1,5 +1,6 @@
 package com.rock_mc.invitation_system;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -7,7 +8,7 @@ import java.io.IOException;
 
 public class InvitationSystem {
 
-    public static final String APP_NAME = "InvitationSystem";
+    public static final String APP_NAME = "InvitSys";
     public static final int NEW_QUOTA = 2;
     public static final int MAX_INPUT_CODE_TIME = 15;
 
@@ -33,9 +34,14 @@ public class InvitationSystem {
     }
 
     public static boolean addWhitelist(Player player) throws IOException {
-        PlayerInfo tempPlayer = new PlayerInfo(player);
-        playerData.add(tempPlayer);
-        whitelist.add(tempPlayer.uid);
+        PlayerInfo currentPlayer = new PlayerInfo(player);
+
+        if(blacklist.contains(currentPlayer.uid)){
+            blacklist.remove(currentPlayer.uid);
+        }
+
+        playerData.add(currentPlayer);
+        whitelist.add(currentPlayer.uid);
         return true;
     }
 
@@ -58,6 +64,7 @@ public class InvitationSystem {
         playerData.add(newPlayer);
         whitelist.add(newPlayer.uid);
 
+        Log.player(player, "成功新增使用者至白名單", ChatColor.GREEN, newPlayer.name);
         return true;
     }
 }

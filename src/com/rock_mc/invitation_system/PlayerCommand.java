@@ -15,7 +15,7 @@ public class PlayerCommand implements CommandExecutor {
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            Log.cur_p(player, "You input cmd", cmd);
+            Log.player(player, "You input cmd", cmd);
         }
         return false;
     }
