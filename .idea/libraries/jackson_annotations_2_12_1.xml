@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="jackson-annotations-2.12.1">
-    <CLASSES />
-    <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/lib/spigot-1.16.5.jar!/" />
-    </SOURCES>
-  </library>
-</component>
