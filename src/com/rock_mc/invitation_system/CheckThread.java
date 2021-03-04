@@ -17,19 +17,19 @@ public class CheckThread extends Thread {
         PlayerInfo currentPlayer = new PlayerInfo(player);
 
         long sleepTime = (long) (1000 * CHECK_TIME);
-        for (int i = 0; i * CHECK_TIME < InvitationSystem.MAX_INPUT_CODE_TIME; i++) {
+        for (int i = 0; i * CHECK_TIME < InvitSys.MAX_INPUT_CODE_TIME; i++) {
             try {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            if (InvitationSystem.whitelist.contains(currentPlayer.uid)) {
+            if (InvitSys.whitelist.contains(currentPlayer.uid)) {
                 break;
             }
         }
         Event event;
-        if (InvitationSystem.whitelist.contains(currentPlayer.uid)) {
+        if (InvitSys.whitelist.contains(currentPlayer.uid)) {
             event = new InvitJoinEvent(player);
         }
         else{

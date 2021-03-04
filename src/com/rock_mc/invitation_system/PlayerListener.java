@@ -26,7 +26,7 @@ public class PlayerListener implements Listener {
         final String uid = player.getUniqueId().toString();
 
         if (player.isOp()) {
-            if(InvitationSystem.addWhitelist(player)){
+            if(InvitSys.addWhitelist(player)){
                 Log.player(player, "因為您具有OP權限", ChatColor.GREEN, "自動被加入白名單");
             }
             else{
@@ -35,7 +35,7 @@ public class PlayerListener implements Listener {
             resetPlayer(player);
             return;
         }
-        if (InvitationSystem.whitelist.contains(uid)) {
+        if (InvitSys.whitelist.contains(uid)) {
             Log.server("通過邀請系統驗證", player.getDisplayName());
             resetPlayer(player);
             return;
@@ -48,7 +48,7 @@ public class PlayerListener implements Listener {
 
     public void onInvitJoin(InvitJoinEvent event){
         Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(InvitationSystem.plugin, new Runnable() {
+        Bukkit.getScheduler().runTask(InvitSys.plugin, new Runnable() {
             public void run() {
                 Log.broadcastLog("歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
                 resetPlayer(player);
@@ -58,7 +58,7 @@ public class PlayerListener implements Listener {
 
     public void onInvitKick(InvitKickEvent event){
         Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(InvitationSystem.plugin, new Runnable() {
+        Bukkit.getScheduler().runTask(InvitSys.plugin, new Runnable() {
             public void run() {
                 player.kickPlayer("抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
             }
@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
         final String name = player.getName();
         final String uid = player.getUniqueId().toString();
 
-        if (!InvitationSystem.blacklist.contains(uid)) {
+        if (!InvitSys.blacklist.contains(uid)) {
             return;
         }
         player.kickPlayer("抱歉!你被列為黑名單!");

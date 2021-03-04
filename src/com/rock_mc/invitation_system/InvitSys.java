@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 
-public class InvitationSystem {
+public class InvitSys {
 
     public static final String APP_NAME = "InvitSys";
     public static final int NEW_QUOTA = 2;
@@ -18,7 +18,7 @@ public class InvitationSystem {
     public static Whitelist whitelist;
     public static Blacklist blacklist;
 
-    public static boolean 
+    public static boolean enable;
 
     public static void init(Plugin inputPlugin){
 
@@ -33,6 +33,8 @@ public class InvitationSystem {
         } catch (Exception e) {
             return;
         }
+
+        enable = true;
     }
 
     public static boolean addWhitelist(Player player) throws IOException {

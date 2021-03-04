@@ -25,7 +25,7 @@ public class Log {
     }
 
     static void playerLog(Player player, String prefixMsg, ChatColor textColor, String postfixMsg) {
-        playerLog(player, "[" + InvitationSystem.APP_NAME + "] " + prefixMsg + " [" + textColor + postfixMsg + ChatColor.WHITE + "]");
+        playerLog(player, "[" + InvitSys.APP_NAME + "] " + prefixMsg + " [" + textColor + postfixMsg + ChatColor.WHITE + "]");
     }
 
     static void player(Player player, String prefixMsg, String postfixMsg) {
@@ -40,7 +40,7 @@ public class Log {
         Bukkit.getServer().broadcastMessage(msg);
     }
     static void broadcastLog(String prefixMsg, ChatColor chatColor, String postfixMsg) {
-        broadcastLog("[" + InvitationSystem.APP_NAME + "] " + prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
+        broadcastLog("[" + InvitSys.APP_NAME + "] " + prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
     }
     static void broadcast(String prefixMsg, String postfixMsg) {
         broadcastLog(prefixMsg, ChatColor.WHITE, postfixMsg);

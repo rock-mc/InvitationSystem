@@ -1,9 +1,6 @@
 package com.rock_mc.invitation_system;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
@@ -17,7 +14,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         this.getCommand("invits").setExecutor(new PlayerCommand());
 
-        InvitationSystem.init(this);
+        InvitSys.init(this);
 
         Log.server("Enable", "Complete");
     }

@@ -1,9 +1,6 @@
 package com.rock_mc.invitation_system;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.bukkit.entity.Player;
-import org.json.simple.*;
 
 import java.util.ArrayList;
 
@@ -20,7 +17,7 @@ public class PlayerInfo {
         uid = null;
         parentId = null;
         childId = new ArrayList<>();
-        invitationQuota = InvitationSystem.NEW_QUOTA;
+        invitationQuota = InvitSys.NEW_QUOTA;
         invitationCode = new ArrayList<>();
     }
 
@@ -29,7 +26,7 @@ public class PlayerInfo {
         uid = player.getUniqueId().toString();
         parentId = null;
         childId = new ArrayList<>();
-        invitationQuota = InvitationSystem.NEW_QUOTA;
+        invitationQuota = InvitSys.NEW_QUOTA;
         invitationCode = new ArrayList<>();
     }
 }
