@@ -2,6 +2,7 @@ package com.rock_mc.invitation_system;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 public class CheckThread extends Thread {
     private Player player;
@@ -24,17 +25,16 @@ public class CheckThread extends Thread {
             }
 
             if (InvitationSystem.whitelist.contains(currentPlayer.uid)) {
-                return;
+                break;
             }
         }
-
+        Event event;
         if (InvitationSystem.whitelist.contains(currentPlayer.uid)) {
-            return;
+            event = new InvitJoinEvent(player);
         }
-        Log.server("發出執行 踢掉", currentPlayer.name);
-        InvitatKickEvent event = new InvitatKickEvent(player);
+        else{
+            event = new InvitKickEvent(player);
+        }
         Bukkit.getPluginManager().callEvent(event);
-//
-//        Bukkit.getScheduler().runTask(InvitationSystem.plugin, () -> Bukkit.getPluginManager().callEvent(event));
     }
 }
