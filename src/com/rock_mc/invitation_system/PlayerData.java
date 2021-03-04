@@ -50,10 +50,18 @@ public class PlayerData {
     }
 
     public void add(PlayerInfo playerInfo) throws IOException {
-        if (contains(playerInfo.uid)){
-            return;
+
+        PlayerInfo tempPlayer = findPlayer(playerInfo.uid);
+        if(tempPlayer == null){
+            playerList.add(playerInfo);
         }
-        playerList.add(playerInfo);
+        else{
+            if (tempPlayer.parentId == null) {
+                tempPlayer.parentId = playerInfo.parentId != null ? playerInfo.parentId : null;
+            }
+            tempPlayer.childId.addAll(playerInfo.childId);
+        }
+        
         save();
     }
 
