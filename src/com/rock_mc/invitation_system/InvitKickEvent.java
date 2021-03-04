@@ -1,17 +1,14 @@
 package com.rock_mc.invitation_system;
 
-//public class KickEvent {
-//}
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class InvitatKickEvent extends Event {
+public class InvitKickEvent extends Event {
 
     private Player player;
 
-    public InvitatKickEvent(Player kickPlayer) {
+    public InvitKickEvent(Player kickPlayer) {
         super(true);
         player = kickPlayer;
     }

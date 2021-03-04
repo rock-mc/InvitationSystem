@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.io.IOException;
@@ -47,18 +46,24 @@ public class PlayerListener implements Listener {
         new CheckThread(player).start();
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onInvitatKick(InvitatKickEvent event){
+    public void onInvitJoin(InvitJoinEvent event){
         Player player = event.getPlayer();
-//        player.kickPlayer("抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
+        Bukkit.getScheduler().runTask(InvitationSystem.plugin, new Runnable() {
+            public void run() {
+                Log.broadcastLog("歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
+                resetPlayer(player);
+            }
+        });
+    }
 
+    public void onInvitKick(InvitKickEvent event){
+        Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(InvitationSystem.plugin, new Runnable() {
             public void run() {
                 player.kickPlayer("抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
             }
         });
     }
-
 
     public void onPlayerLogin(PlayerLoginEvent event) {
         final Player player = event.getPlayer();
