@@ -25,6 +25,14 @@ public class PlayerData {
             playerList = new ArrayList<>();
         }
     }
+    public boolean isRepeatCode(String invitCode){
+        for(PlayerInfo p : playerList){
+            if(p.invitationCode.contains(invitCode)){
+                return true;
+            }
+        }
+        return false;
+    }
     public PlayerInfo findPlayer(String player_uid){
         PlayerInfo result = null;
 
