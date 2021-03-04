@@ -20,49 +20,45 @@ public class Log {
         return result;
     }
 
-    static void playerLog(Player player, String msg) {
-        player.sendMessage(msg);
-    }
-
-    static void playerLog(Player player, String prefixMsg, ChatColor textColor, String postfixMsg) {
-        playerLog(player, "[" + InvitSys.APP_NAME + "] " + prefixMsg + " [" + textColor + postfixMsg + ChatColor.WHITE + "]");
+    static void player(Player player, String msg) {
+        player.sendMessage("[" + InvitSys.APP_NAME + "] " + msg);
     }
 
     static void player(Player player, String prefixMsg, String postfixMsg) {
-        Log.player(player, prefixMsg, ChatColor.WHITE, postfixMsg);
+        player(player, prefixMsg, ChatColor.WHITE, postfixMsg);
     }
 
     static void player(Player player, String prefixMsg, ChatColor textColor, String postfixMsg) {
-        playerLog(player, prefixMsg, textColor, postfixMsg);
+        player(player, prefixMsg + " [" + textColor + postfixMsg + ChatColor.WHITE + "]");
     }
 
-    static void broadcastLog(String msg) {
-        Bukkit.getServer().broadcastMessage(msg);
+    static void broadcast(String msg) {
+        Bukkit.getServer().broadcastMessage("[" + InvitSys.APP_NAME + "] " + msg);
     }
-    static void broadcastLog(String prefixMsg, ChatColor chatColor, String postfixMsg) {
-        broadcastLog("[" + InvitSys.APP_NAME + "] " + prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
+    static void broadcast(String prefixMsg, ChatColor chatColor, String postfixMsg) {
+        broadcast(prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
     }
     static void broadcast(String prefixMsg, String postfixMsg) {
-        broadcastLog(prefixMsg, ChatColor.WHITE, postfixMsg);
+        broadcast(prefixMsg, ChatColor.WHITE, postfixMsg);
     }
 
     static void broadcast(String prefixMsg, String[] postfixMsg) {
-        broadcastLog(prefixMsg, ChatColor.WHITE, arrayToString(postfixMsg));
+        broadcast(prefixMsg, ChatColor.WHITE, arrayToString(postfixMsg));
     }
 
     static void serverLog(String msg) {
         logger.info(msg);
     }
 
-    static void serverLog(String prefixMsg, ChatColor chatColor, String postfixMsg) {
+    static void server(String prefixMsg, ChatColor chatColor, String postfixMsg) {
         serverLog(prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
     }
 
     static void server(String prefixMsg, String postfixMsg) {
-        serverLog(prefixMsg, ChatColor.WHITE, postfixMsg);
+        server(prefixMsg, ChatColor.WHITE, postfixMsg);
     }
 
     static void server(String prefixMsg, String[] postfixMsg) {
-        serverLog(prefixMsg, ChatColor.WHITE, arrayToString(postfixMsg));
+        server(prefixMsg, ChatColor.WHITE, arrayToString(postfixMsg));
     }
 }
