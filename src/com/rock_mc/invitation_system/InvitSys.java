@@ -49,16 +49,17 @@ public class InvitSys {
         return true;
     }
 
-    public static boolean addWhitelist(Player player, String invitationCode) throws IOException {
+    public static boolean addWhitelist(Player player, String invitCode) throws IOException {
 
         PlayerInfo parent = null;
         for(PlayerInfo p : playerData.playerList){
-            if(p.invitationCode.contains(invitationCode)){
+            if(p.invitationCode.contains(invitCode)){
                 parent = p;
                 break;
             }
         }
         if(parent == null){
+            Log.player(player, "查無此邀請碼", ChatColor.RED, invitCode);
             return false;
         }
         PlayerInfo newPlayer = new PlayerInfo(player, InvitSys.DEFAULT_INVIT_QUOTA);
@@ -68,7 +69,6 @@ public class InvitSys {
         playerData.add(newPlayer);
         whitelist.add(newPlayer.uid);
 
-        Log.player(player, "成功新增使用者至白名單", ChatColor.GREEN, newPlayer.name);
         return true;
     }
 }
