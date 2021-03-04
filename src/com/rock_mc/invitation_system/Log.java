@@ -40,7 +40,7 @@ public class Log {
         Bukkit.getServer().broadcastMessage(msg);
     }
     static void broadcastLog(String prefixMsg, ChatColor chatColor, String postfixMsg) {
-        broadcastLog(prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
+        broadcastLog("[" + InvitationSystem.APP_NAME + "] " + prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
     }
     static void broadcast(String prefixMsg, String postfixMsg) {
         broadcastLog(prefixMsg, ChatColor.WHITE, postfixMsg);
