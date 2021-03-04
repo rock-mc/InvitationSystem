@@ -21,12 +21,17 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
+
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
         final String uid = player.getUniqueId().toString();
 
+        if(!InvitSys.enable){
+            return;
+        }
+
         if (player.isOp()) {
-            if(InvitSys.addWhitelist(player)){
+            if(InvitSys.addWhitelist(player, InvitSys.DEFAULT_INVIT_QUOTA)){
                 Log.player(player, "因為您具有OP權限", ChatColor.GREEN, "自動被加入白名單");
             }
             else{

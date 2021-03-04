@@ -14,7 +14,12 @@ public class CheckThread extends Thread {
 
     public void run() {
 
-        PlayerInfo currentPlayer = new PlayerInfo(player);
+        if(!InvitSys.enable){
+            Bukkit.getPluginManager().callEvent(new InvitJoinEvent(player));
+            return;
+        }
+
+        PlayerInfo currentPlayer = new PlayerInfo(player, 0);
 
         long sleepTime = (long) (1000 * CHECK_TIME);
         for (int i = 0; i * CHECK_TIME < InvitSys.MAX_INPUT_CODE_TIME; i++) {
