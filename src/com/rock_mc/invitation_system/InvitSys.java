@@ -18,6 +18,8 @@ public class InvitationSystem {
     public static Whitelist whitelist;
     public static Blacklist blacklist;
 
+    public static boolean 
+
     public static void init(Plugin inputPlugin){
 
         plugin = inputPlugin;
