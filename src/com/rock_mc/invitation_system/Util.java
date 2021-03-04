@@ -3,6 +3,7 @@ package com.rock_mc.invitation_system;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.UUID;
 
 public class Util {
 
@@ -28,5 +29,9 @@ public class Util {
         writer.write(data);
         writer.flush();
         writer.close();
+    }
+    static String genUUID(){
+        String uuid = UUID. randomUUID().toString().replace("-", "");
+        return uuid;
     }
 }
