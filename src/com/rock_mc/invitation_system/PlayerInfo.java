@@ -17,16 +17,16 @@ public class PlayerInfo {
         uid = null;
         parentId = null;
         childId = new ArrayList<>();
-        invitationQuota = InvitSys.NEW_QUOTA;
+        invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
         invitationCode = new ArrayList<>();
     }
 
-    public PlayerInfo(Player player) {
+    public PlayerInfo(Player player, int invitQuota) {
         name = player.getName();
         uid = player.getUniqueId().toString();
         parentId = null;
         childId = new ArrayList<>();
-        invitationQuota = InvitSys.NEW_QUOTA;
+        invitationQuota = invitQuota;
         invitationCode = new ArrayList<>();
     }
 }

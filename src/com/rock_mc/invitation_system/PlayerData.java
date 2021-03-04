@@ -61,7 +61,7 @@ public class PlayerData {
             }
             tempPlayer.childId.addAll(playerInfo.childId);
         }
-        
+
         save();
     }
 

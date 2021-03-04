@@ -9,7 +9,7 @@ import java.io.IOException;
 public class InvitSys {
 
     public static final String APP_NAME = "InvitSys";
-    public static final int NEW_QUOTA = 2;
+    public static final int DEFAULT_INVIT_QUOTA = 2;
     public static final int MAX_INPUT_CODE_TIME = 15;
 
     public static Plugin plugin;
@@ -37,8 +37,8 @@ public class InvitSys {
         enable = true;
     }
 
-    public static boolean addWhitelist(Player player) throws IOException {
-        PlayerInfo currentPlayer = new PlayerInfo(player);
+    public static boolean addWhitelist(Player player, int invitQuota) throws IOException {
+        PlayerInfo currentPlayer = new PlayerInfo(player, invitQuota);
 
         if(blacklist.contains(currentPlayer.uid)){
             blacklist.remove(currentPlayer.uid);
@@ -61,7 +61,7 @@ public class InvitSys {
         if(parent == null){
             return false;
         }
-        PlayerInfo newPlayer = new PlayerInfo(player);
+        PlayerInfo newPlayer = new PlayerInfo(player, InvitSys.DEFAULT_INVIT_QUOTA);
         parent.childId.add(newPlayer.uid);
         newPlayer.parentId = parent.uid;
 
