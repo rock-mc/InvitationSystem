@@ -30,6 +30,11 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        if (InvitSys.whitelist.contains(uid)) {
+            Log.server("通過邀請系統驗證", player.getDisplayName());
+            resetPlayer(player);
+            return;
+        }
         if (player.isOp()) {
             if(InvitSys.addWhitelist(player, InvitSys.DEFAULT_INVIT_QUOTA)){
                 Log.player(player, "因為您具有OP權限", ChatColor.GREEN, "自動被加入白名單");
@@ -37,11 +42,6 @@ public class PlayerListener implements Listener {
             else{
                 Log.player(player, "自動加入白名單失敗", ChatColor.RED, "不明原因");
             }
-            resetPlayer(player);
-            return;
-        }
-        if (InvitSys.whitelist.contains(uid)) {
-            Log.server("通過邀請系統驗證", player.getDisplayName());
             resetPlayer(player);
             return;
         }
@@ -55,7 +55,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(InvitSys.plugin, new Runnable() {
             public void run() {
-                Log.broadcastLog("歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
+                Log.broadcast("歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
                 resetPlayer(player);
             }
         });
