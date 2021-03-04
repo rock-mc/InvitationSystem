@@ -9,3 +9,7 @@ commands:
     description: Show help of InvitationSystem
     usage: /invits
     default: true
+  invits input:
+    description: Input the invitation code to join server
+    usage: /invits input <invitation code>
+    default: true
