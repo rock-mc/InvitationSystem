@@ -4,13 +4,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.UUID;
+
 public class InvitJoinEvent extends Event {
 
-    private Player player;
+    private UUID player_uid;
 
-    public InvitJoinEvent(Player kickPlayer) {
-        super(true);
-        player = kickPlayer;
+    public InvitJoinEvent(Player joinPlayer, boolean isAsync) {
+        super(isAsync);
+        player_uid = joinPlayer.getUniqueId();
     }
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -24,8 +26,8 @@ public class InvitJoinEvent extends Event {
         return HANDLERS;
     }
 
-    public Player getPlayer(){
-        return player;
+    public UUID getPlayerUid(){
+        return player_uid;
     }
 }
 

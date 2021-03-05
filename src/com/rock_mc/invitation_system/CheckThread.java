@@ -15,7 +15,7 @@ public class CheckThread extends Thread {
     public void run() {
 
         if(!InvitSys.enable){
-            Bukkit.getPluginManager().callEvent(new InvitJoinEvent(player));
+            Bukkit.getPluginManager().callEvent(new InvitJoinEvent(player, true));
             return;
         }
 
@@ -35,7 +35,7 @@ public class CheckThread extends Thread {
         }
         Event event;
         if (InvitSys.whitelist.contains(currentPlayer.uid)) {
-            event = new InvitJoinEvent(player);
+            event = new InvitJoinEvent(player, true);
         }
         else{
             event = new InvitKickEvent(player);
