@@ -10,7 +10,7 @@
 如果打開，插件只會讓在白名單上的玩家登入。  
 當玩家沒有在黑名單與白名單上，插件將會請玩家輸入邀請碼，三十秒後如未成功驗證則會被踢出伺服器。  
 如果關閉，插件會讓任何不在黑名單上的玩家登入。  
-### invits set <player/all> <how many invitation quota>
+### invits set <player/all> \<how many invitation quota>
 設定該玩家的邀請配額。  
 ### invits gencode
 產生邀請碼，並使玩家的邀請配額減 1。  
