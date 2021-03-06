@@ -48,12 +48,9 @@ public class PlayerCommand implements CommandExecutor {
                     } else {
                         String invitCode = args[1];
                         Log.player(player, "輸入驗證碼", ChatColor.GREEN, invitCode);
+
                         if (InvitSys.addWhitelist(player, invitCode)) {
                             Log.player(player, ChatColor.GREEN + "驗證通過!");
-
-                            Event event = new InvitJoinEvent(player, false);
-                            Bukkit.getPluginManager().callEvent(event);
-
                         } else {
                             Log.player(player, ChatColor.RED + "驗證失敗!");
                         }
