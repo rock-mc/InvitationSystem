@@ -51,12 +51,14 @@ public class PlayerListener implements Listener {
         new CheckThread(player).start();
     }
 
+    @EventHandler
     public void onInvitJoin(InvitJoinEvent event){
-        Player player = Bukkit.getServer().getPlayer(event.getPlayerUid());
+        Player player = event.getPlayer();
         Log.broadcast("歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
         resetPlayer(player);
     }
 
+    @EventHandler
     public void onInvitKick(InvitKickEvent event){
         Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(InvitSys.plugin, new Runnable() {
@@ -66,6 +68,7 @@ public class PlayerListener implements Listener {
         });
     }
 
+    @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         final Player player = event.getPlayer();
         final String name = player.getName();

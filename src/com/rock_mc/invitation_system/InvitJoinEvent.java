@@ -8,11 +8,12 @@ import java.util.UUID;
 
 public class InvitJoinEvent extends Event {
 
-    private UUID player_uid;
+    private Player player;
+    private boolean isCancelled;
 
     public InvitJoinEvent(Player joinPlayer, boolean isAsync) {
         super(isAsync);
-        player_uid = joinPlayer.getUniqueId();
+        player = joinPlayer;
     }
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -26,8 +27,16 @@ public class InvitJoinEvent extends Event {
         return HANDLERS;
     }
 
-    public UUID getPlayerUid(){
-        return player_uid;
+    public Player getPlayer(){
+        return player;
+    }
+
+    public boolean isCancelled() {
+        return this.isCancelled;
+    }
+
+    public void setCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 }
 
