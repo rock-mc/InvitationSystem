@@ -51,8 +51,21 @@ public class PlayerCommand implements CommandExecutor {
 
                         if (InvitSys.addWhitelist(player, invitCode)) {
                             Log.player(player, ChatColor.GREEN + "驗證通過!");
+                            InvitSys.failList.remove(playerInfo.uid);
                         } else {
                             Log.player(player, ChatColor.RED + "驗證失敗!");
+
+                            InvitSys.failList.add(playerInfo.uid);
+                            FailVerifyPlayer failPlayer = InvitSys.failList.getFailVerifyPlayer(playerInfo.uid);
+                            failPlayer.failTime += 1;
+                            InvitSys.failList.save();
+
+                            if (failPlayer.failTime >= InvitSys.MAX_RETRY_TIME) {
+                                InvitSys.addBlacklist(player, InvitSys.MAX_RETRY_FAIL_BLOCK_DAY);
+
+                                Event event = new InvitKickEvent(false, player, "抱歉，請勿亂猜驗證碼，冷靜個 " + InvitSys.MAX_RETRY_FAIL_BLOCK_DAY + " 天吧");
+                                Bukkit.getPluginManager().callEvent(event);
+                            }
                         }
                     }
                 } else if (args[0].equalsIgnoreCase("gencode")) {
