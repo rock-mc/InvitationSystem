@@ -7,10 +7,12 @@ import org.bukkit.event.HandlerList;
 public class InvitKickEvent extends Event {
 
     private Player player;
+    private String msg;
 
-    public InvitKickEvent(Player kickPlayer) {
-        super(true);
+    public InvitKickEvent(boolean isAsync, Player kickPlayer, String display_msg) {
+        super(isAsync);
         player = kickPlayer;
+        msg = display_msg;
     }
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -26,6 +28,9 @@ public class InvitKickEvent extends Event {
 
     public Player getPlayer(){
         return player;
+    }
+    public String getMessage(){
+        return msg;
     }
 }
 
