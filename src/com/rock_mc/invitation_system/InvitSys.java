@@ -11,6 +11,7 @@ public class InvitSys {
     public static final String APP_NAME = "InvitSys";
     public static final int DEFAULT_INVIT_QUOTA = 2;
     public static final int MAX_INPUT_CODE_TIME = 30;
+    public static final int INVIT_CODE_LENGTH = 6;
 
     public static Plugin plugin;
 
