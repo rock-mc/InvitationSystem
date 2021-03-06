@@ -52,6 +52,10 @@ public class InvitSys {
         }
 
         playerData.add(currentPlayer);
+        currentPlayer = playerData.findPlayer(currentPlayer.uid);
+        currentPlayer.resetCode();
+        playerData.save();
+
         blacklist.add(currentPlayer.uid, day);
         Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 加入至黑名單");
         return true;

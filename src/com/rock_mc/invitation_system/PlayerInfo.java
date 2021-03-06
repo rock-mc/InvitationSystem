@@ -29,4 +29,8 @@ public class PlayerInfo {
         invitationQuota = invitQuota;
         invitationCode = new ArrayList<>();
     }
+
+    public void resetCode(){
+        invitationCode = new ArrayList<>();
+    }
 }
