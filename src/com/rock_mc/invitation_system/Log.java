@@ -33,10 +33,7 @@ public class Log {
     }
 
     static void broadcast(String msg) {
-//        for(Player p :Bukkit.getServer().getOnlinePlayers()){
-//            player(p, msg);
-//        }
-        Bukkit.getServer().broadcastMessage(msg);
+        Bukkit.broadcastMessage(msg);
     }
     static void broadcast(String prefixMsg, ChatColor chatColor, String postfixMsg) {
         broadcast(prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
