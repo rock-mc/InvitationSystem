@@ -47,7 +47,6 @@ public class InvitSys {
         PlayerInfo currentPlayer = new PlayerInfo(player, 0);
 
         if(whitelist.contains(currentPlayer.uid)){
-            Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 從白名單中移除");
             whitelist.remove(currentPlayer.uid);
         }
 
@@ -65,6 +64,7 @@ public class InvitSys {
         PlayerInfo currentPlayer = new PlayerInfo(player, invitQuota);
 
         if(blacklist.contains(currentPlayer.uid)){
+            Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 從黑名單中移除");
             blacklist.remove(currentPlayer.uid);
         }
 
