@@ -1,5 +1,6 @@
 package com.rock_mc.invitation_system;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -15,7 +16,7 @@ public class CheckThread extends Thread {
     public void run() {
 
         if(!InvitSys.enable){
-            Bukkit.getPluginManager().callEvent(new InvitJoinEvent(player, true));
+            Bukkit.getPluginManager().callEvent(new InvitJoinEvent(true, player, "歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!"));
             return;
         }
 
@@ -35,10 +36,10 @@ public class CheckThread extends Thread {
         }
         Event event;
         if (InvitSys.whitelist.contains(currentPlayer.uid)) {
-            event = new InvitJoinEvent(player, true);
+            event = new InvitJoinEvent(true, player, "歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
         }
         else{
-            event = new InvitKickEvent(player);
+            event = new InvitKickEvent(true, player, "抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
         }
         Bukkit.getPluginManager().callEvent(event);
     }

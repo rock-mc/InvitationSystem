@@ -54,7 +54,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onInvitJoin(InvitJoinEvent event){
         Player player = event.getPlayer();
-        Log.broadcast("歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
+        Log.broadcast(event.getMessage());
         resetPlayer(player);
     }
 
@@ -63,7 +63,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(InvitSys.plugin, new Runnable() {
             public void run() {
-                player.kickPlayer("抱歉未通過認證，請取得邀請碼後，參考官網教學輸入邀請碼");
+                player.kickPlayer(event.getMessage());
             }
         });
     }
@@ -77,6 +77,13 @@ public class PlayerListener implements Listener {
         if (!InvitSys.blacklist.contains(uid)) {
             return;
         }
+        Prisoner p = InvitSys.blacklist.getPrisoner(uid);
+        if (p.isExpiry()){
+            InvitSys.blacklist.remove(uid);
+            return;
+        }
+        // in black list and not expiry
+        // kick!!!!!!!
         player.kickPlayer("抱歉!你被列為黑名單!");
     }
 }

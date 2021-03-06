@@ -56,7 +56,7 @@ public class Blacklist {
         save();
     }
 
-    private void save() throws IOException {
+    public void save() throws IOException {
         if (filePath == null) {
             return;
         }
