@@ -12,12 +12,16 @@ public class InvitSys {
     public static final int DEFAULT_INVIT_QUOTA = 2;
     public static final int MAX_INPUT_CODE_TIME = 30;
     public static final int INVIT_CODE_LENGTH = 6;
+    public static final int MAX_RETRY_TIME = 3;
+    public static final int MAX_RETRY_FAIL_BLOCK_DAY = 3;
+
 
     public static Plugin plugin;
 
     public static PlayerData playerData;
     public static Whitelist whitelist;
     public static Blacklist blacklist;
+    public static FailList failList;
 
     public static boolean enable;
 
@@ -31,11 +35,26 @@ public class InvitSys {
             playerData = new PlayerData("plugins/" + APP_NAME + "/playerdata.json");
             whitelist = new Whitelist("plugins/" + APP_NAME + "/whitelist.json");
             blacklist = new Blacklist("plugins/" + APP_NAME + "/blacklist.json");
+            failList = new FailList("plugins/" + APP_NAME + "/faillist.json");
         } catch (Exception e) {
             return;
         }
 
         enable = true;
+    }
+
+    public static boolean addBlacklist(Player player, int day) throws IOException {
+        PlayerInfo currentPlayer = new PlayerInfo(player, 0);
+
+        if(whitelist.contains(currentPlayer.uid)){
+            Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 從白名單中移除");
+            whitelist.remove(currentPlayer.uid);
+        }
+
+        playerData.add(currentPlayer);
+        blacklist.add(currentPlayer.uid, day);
+        Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 加入至黑名單");
+        return true;
     }
 
     public static boolean addWhitelist(Player player, int invitQuota) throws IOException {
