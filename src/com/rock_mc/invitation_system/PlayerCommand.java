@@ -100,7 +100,9 @@ public class PlayerCommand implements CommandExecutor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+        }
+        else{
+            Log.server("請在遊戲中下指令");
         }
         return true;
     }
