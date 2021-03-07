@@ -21,6 +21,15 @@ public class PlayerInfo {
         invitationCode = new ArrayList<>();
     }
 
+    public PlayerInfo(Player player) {
+        name = player.getName();
+        uid = player.getUniqueId().toString();
+        parentId = null;
+        childId = new ArrayList<>();
+        invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
+        invitationCode = new ArrayList<>();
+    }
+
     public PlayerInfo(Player player, int invitQuota) {
         name = player.getName();
         uid = player.getUniqueId().toString();
