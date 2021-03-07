@@ -11,7 +11,7 @@ public class Main extends JavaPlugin {
 
         Log.server("Enable", "Active");
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new EventListener(), this);
         this.getCommand("invits").setExecutor(new PlayerCommand());
 
         InvitSys.init(this);
