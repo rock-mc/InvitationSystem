@@ -46,13 +46,18 @@ public class InvitSys {
     public static boolean addBlacklist(Player player, int day) throws IOException {
         PlayerInfo currentPlayer = new PlayerInfo(player, 0);
 
+        // 從白名單中移除
         if(whitelist.contains(currentPlayer.uid)){
             whitelist.remove(currentPlayer.uid);
         }
 
+        // 設定使用者資料
         playerData.add(currentPlayer);
+        // 取得使用者資料
         currentPlayer = playerData.findPlayer(currentPlayer.uid);
+        // 將邀請碼清空
         currentPlayer.resetCode();
+        // 儲存
         playerData.save();
 
         blacklist.add(currentPlayer.uid, day);
@@ -63,11 +68,13 @@ public class InvitSys {
     public static boolean addWhitelist(Player player, int invitQuota) throws IOException {
         PlayerInfo currentPlayer = new PlayerInfo(player, invitQuota);
 
+        // 從黑名單中移除
         if(blacklist.contains(currentPlayer.uid)){
             Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 從黑名單中移除");
             blacklist.remove(currentPlayer.uid);
         }
 
+        // 設定使用者資料
         playerData.add(currentPlayer);
         whitelist.add(currentPlayer.uid);
         return true;
@@ -76,14 +83,15 @@ public class InvitSys {
     public static boolean addWhitelist(Player player, String invitCode) throws IOException {
 
         PlayerInfo parent = null;
-        for(PlayerInfo p : playerData.playerList){
+        for(String playerUid : whitelist.playerList){
+            PlayerInfo p = playerData.findPlayer(playerUid);
             if(p.invitationCode.contains(invitCode)){
                 parent = p;
                 break;
             }
         }
         if(parent == null){
-            Log.player(player, "查無此邀請碼", ChatColor.RED, invitCode);
+            Log.player(player, ChatColor.RED + "查無此邀請碼");
             return false;
         }
         PlayerInfo newPlayer = new PlayerInfo(player, InvitSys.DEFAULT_INVIT_QUOTA);
