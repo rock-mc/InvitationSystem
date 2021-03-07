@@ -67,7 +67,7 @@ public class Blacklist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(String playerUid) {
+    public void remove(String playerUid) throws IOException {
 
         Prisoner currentPrisoner = null;
         for(Prisoner prisoner : playerList){
@@ -81,6 +81,7 @@ public class Blacklist {
         }
 
         playerList.remove(currentPrisoner);
+        save();
     }
 
     public boolean contains(String playerUid) {
