@@ -6,12 +6,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.io.IOException;
 
-public class PlayerListener implements Listener {
+public class EventListener implements Listener {
     private final float CHECK_TIME = 0.5F; //    sec
     private final float DEFAULT_WALK_SPEED = 0.2F;
 
@@ -69,9 +71,9 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    public void onPlayerLogin(PlayerLoginEvent event) throws IOException {
         final Player player = event.getPlayer();
-        final String name = player.getName();
+        final String name = player.getDisplayName();
         final String uid = player.getUniqueId().toString();
 
         if (!InvitSys.blacklist.contains(uid)) {
@@ -83,7 +85,21 @@ public class PlayerListener implements Listener {
             return;
         }
         // in black list and not expiry
-        // kick!!!!!!!
-        player.kickPlayer("抱歉!你被列為黑名單!");
+        // BLOCK !!!!!!!
+        event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "抱歉!你已經被列為黑名單!");
+    }
+
+    @EventHandler
+    public void on(AsyncPlayerChatEvent event) throws IOException {
+        final Player player = event.getPlayer();
+        final String name = player.getDisplayName();
+        final String uid = player.getUniqueId().toString();
+
+        if (InvitSys.whitelist.contains(uid)) {
+            return;
+        }
+
+        event.setCancelled(true);
+        Log.player(player, "因為您尚未通過驗證，所以此訊息並未送出", event.getMessage());
     }
 }
