@@ -21,6 +21,10 @@ public class Prisoner {
         expiryTime = day * Util.DAY + hour * Util.HOUR + min * Util.MIN + sec * Util.SEC;
     }
     public boolean isExpiry(){
+        if(expiryTime == 0){
+            return false;
+        }
+
         return java.time.Instant.now().getEpochSecond() >= basicTime + expiryTime;
     }
 }
