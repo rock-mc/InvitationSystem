@@ -21,7 +21,12 @@ public class Log {
     }
 
     static void player(Player player, String msg) {
-        player.sendMessage("[" + InvitSys.APP_NAME + "] " + msg);
+        if (player != null) {
+            player.sendMessage("[" + ChatColor.GOLD + InvitSys.APP_NAME + ChatColor.WHITE + "] " + msg);
+        }
+        else{
+            server(msg);
+        }
     }
 
     static void player(Player player, String prefixMsg, String postfixMsg) {
