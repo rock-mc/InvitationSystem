@@ -58,14 +58,15 @@ public class PlayerCommand implements CommandExecutor {
                             InvitSys.failList.add(playerInfo.uid);
                             FailVerifyPlayer failPlayer = InvitSys.failList.getFailVerifyPlayer(playerInfo.uid);
                             failPlayer.failTime += 1;
-                            InvitSys.failList.save();
 
                             if (failPlayer.failTime >= InvitSys.MAX_RETRY_TIME) {
                                 InvitSys.addBlacklist(player, InvitSys.MAX_RETRY_FAIL_BLOCK_DAY);
+                                InvitSys.failList.remove(playerInfo.uid);
 
                                 Event event = new InvitKickEvent(false, player, "抱歉，請勿亂猜驗證碼，冷靜個 " + InvitSys.MAX_RETRY_FAIL_BLOCK_DAY + " 天吧");
                                 Bukkit.getPluginManager().callEvent(event);
                             }
+                            InvitSys.failList.save();
                         }
                     }
                 } else if (args[0].equalsIgnoreCase("gencode")) {
