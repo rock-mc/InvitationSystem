@@ -5,6 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class InvitSys {
 
@@ -13,7 +17,7 @@ public class InvitSys {
     public static final int MAX_INPUT_CODE_TIME = 30;
     public static final int INVIT_CODE_LENGTH = 6;
     public static final int MAX_RETRY_TIME = 3;
-    public static final int MAX_RETRY_FAIL_BLOCK_DAY = 3;
+    public static final int MAX_RETRY_FAIL_BLOCK_DAY = 1;
 
 
     public static Plugin plugin;
@@ -22,6 +26,7 @@ public class InvitSys {
     public static Whitelist whitelist;
     public static Blacklist blacklist;
     public static FailList failList;
+    public static HashSet<UUID> freezePlayerList;
 
     public static boolean enable;
 
@@ -39,6 +44,7 @@ public class InvitSys {
         } catch (Exception e) {
             return;
         }
+        freezePlayerList = new HashSet<>();
 
         enable = true;
     }
