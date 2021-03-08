@@ -72,6 +72,8 @@ public class PlayerCommand implements CommandExecutor {
                         FailVerifyPlayer failPlayer = InvitSys.failList.getFailVerifyPlayer(playerInfo.uid);
                         failPlayer.failTime += 1;
 
+                        Log.player(player, "您尚有 " + ChatColor.RED + (InvitSys.MAX_RETRY_TIME - failPlayer.failTime) + ChatColor.WHITE + " 次輸入機會");
+
                         if (failPlayer.failTime >= InvitSys.MAX_RETRY_TIME) {
                             InvitSys.addBlacklist(player, InvitSys.MAX_RETRY_FAIL_BLOCK_DAY, 0, 0, 0);
                             InvitSys.failList.remove(playerInfo.uid);
