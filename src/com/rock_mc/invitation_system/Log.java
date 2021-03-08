@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 public class Log {
     public static Logger logger;
+    private static String LOG_PREFIX = "[" + ChatColor.GOLD + InvitSys.APP_NAME + ChatColor.WHITE + "] ";
 
     static String arrayToString(String[] postfix_msg) {
         String result = null;
@@ -22,7 +23,7 @@ public class Log {
 
     static void player(Player player, String msg) {
         if (player != null) {
-            player.sendMessage("[" + ChatColor.GOLD + InvitSys.APP_NAME + ChatColor.WHITE + "] " + msg);
+            player.sendMessage(LOG_PREFIX + msg);
         }
         else{
             server(msg);
@@ -38,7 +39,7 @@ public class Log {
     }
 
     static void broadcast(String msg) {
-        Bukkit.broadcastMessage(msg);
+        Bukkit.broadcastMessage(LOG_PREFIX + msg);
     }
     static void broadcast(String prefixMsg, ChatColor chatColor, String postfixMsg) {
         broadcast(prefixMsg + " [" + chatColor + postfixMsg + ChatColor.WHITE + "]");
