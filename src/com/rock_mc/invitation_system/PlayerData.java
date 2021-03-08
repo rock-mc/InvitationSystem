@@ -33,11 +33,11 @@ public class PlayerData {
         }
         return false;
     }
-    public PlayerInfo findPlayer(UUID playerUid){
+    public PlayerInfo findPlayer(UUID uuid){
         PlayerInfo result = null;
 
         for(PlayerInfo p : playerList){
-            if(p.uuid.equals(playerUid)){
+            if(p.uuid.equals(uuid)){
                 result = p;
                 break;
             }
@@ -45,9 +45,21 @@ public class PlayerData {
 
         return result;
     }
-    public boolean contains(UUID playerUid){
+    public PlayerInfo findPlayer(String name){
+        PlayerInfo result = null;
+
         for(PlayerInfo p : playerList){
-            if(p.uuid.equals(playerUid)){
+            if(p.name.equalsIgnoreCase(name)){
+                result = p;
+                break;
+            }
+        }
+
+        return result;
+    }
+    public boolean contains(UUID uuid){
+        for(PlayerInfo p : playerList){
+            if(p.uuid.equals(uuid)){
                 return true;
             }
         }

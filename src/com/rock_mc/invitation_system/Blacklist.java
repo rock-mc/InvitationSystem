@@ -31,10 +31,10 @@ public class Blacklist {
         playerList = new HashSet<>();
     }
 
-    public Prisoner getPrisoner(UUID playerUid){
+    public Prisoner getPrisoner(UUID uuid){
         Prisoner result = null;
         for(Prisoner prisoner : playerList){
-            if(prisoner.uuid.equals(playerUid)){
+            if(prisoner.uuid.equals(uuid)){
                 result = prisoner;
                 break;
             }
@@ -42,14 +42,14 @@ public class Blacklist {
         return result;
     }
 
-    public void add(UUID playerUid, int day, int hour, int min, int sec) throws IOException {
+    public void add(UUID uuid, int day, int hour, int min, int sec) throws IOException {
 
-        Prisoner currentPrisoner = getPrisoner(playerUid);
+        Prisoner currentPrisoner = getPrisoner(uuid);
         if(currentPrisoner != null){
             currentPrisoner.setExpiryTime(day, hour, min, sec);
         }
         else{
-            Prisoner prisoner = new Prisoner(playerUid, day, hour, min, sec);
+            Prisoner prisoner = new Prisoner(uuid, day, hour, min, sec);
             playerList.add(prisoner);
         }
         save();
@@ -66,11 +66,11 @@ public class Blacklist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(UUID playerUid) throws IOException {
+    public void remove(UUID uuid) throws IOException {
 
         Prisoner currentPrisoner = null;
         for(Prisoner prisoner : playerList){
-            if(prisoner.uuid.equals(playerUid)){
+            if(prisoner.uuid.equals(uuid)){
                 currentPrisoner = prisoner;
                 break;
             }
@@ -83,7 +83,7 @@ public class Blacklist {
         save();
     }
 
-    public boolean contains(UUID playerUid) {
-        return getPrisoner(playerUid) != null;
+    public boolean contains(UUID uuid) {
+        return getPrisoner(uuid) != null;
     }
 }

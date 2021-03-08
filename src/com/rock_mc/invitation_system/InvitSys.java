@@ -92,8 +92,8 @@ public class InvitSys {
     public static boolean addWhitelist(Player player, String invitCode) throws IOException {
 
         PlayerInfo parent = null;
-        for(UUID playerUid : whitelist.playerList){
-            PlayerInfo p = playerData.findPlayer(playerUid);
+        for(UUID uuid : whitelist.playerList){
+            PlayerInfo p = playerData.findPlayer(uuid);
             if(p.invitationCode.contains(invitCode)){
                 parent = p;
                 break;

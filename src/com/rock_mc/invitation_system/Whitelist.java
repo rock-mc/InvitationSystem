@@ -31,11 +31,11 @@ public class Whitelist {
         playerList = new HashSet<>();
     }
 
-    public void add(UUID playerUid) throws IOException {
-        if (playerList.contains(playerUid)){
+    public void add(UUID uuid) throws IOException {
+        if (playerList.contains(uuid)){
             return;
         }
-        playerList.add(playerUid);
+        playerList.add(uuid);
         save();
     }
 
@@ -50,11 +50,11 @@ public class Whitelist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(UUID playerUid) {
-        if (!playerList.contains(playerUid)){
+    public void remove(UUID uuid) {
+        if (!playerList.contains(uuid)){
             return;
         }
-        playerList.remove(playerUid);
+        playerList.remove(uuid);
     }
 
     public boolean contains(UUID player_uid) {

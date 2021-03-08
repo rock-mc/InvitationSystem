@@ -24,13 +24,13 @@ public class EventListener implements Listener {
 
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
-        final UUID uid = player.getUniqueId();
+        final UUID uuid = player.getUniqueId();
 
         if (!InvitSys.enable) {
             return;
         }
 
-        if (InvitSys.whitelist.contains(uid)) {
+        if (InvitSys.whitelist.contains(uuid)) {
             Log.broadcast("通過邀請系統驗證", player.getDisplayName());
             resetPlayer(player);
             return;
@@ -88,9 +88,9 @@ public class EventListener implements Listener {
 
         String kickMsg;
         if (p.expiryTime == 0) {
-            kickMsg = "抱歉!你已經被列為黑名單!";
+            kickMsg = "抱歉!你被列為黑名單!";
         } else {
-            kickMsg = "抱歉!你已經被列為黑名單!\n刑期尚有 ";
+            kickMsg = "抱歉!你被列為黑名單!\n刑期尚有 ";
 
             long expiryTime = p.basicTime + p.expiryTime;
             expiryTime -= java.time.Instant.now().getEpochSecond();
@@ -113,9 +113,9 @@ public class EventListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
-        final UUID uid = player.getUniqueId();
+        final UUID uuid = player.getUniqueId();
 
-        if (InvitSys.whitelist.contains(uid)) {
+        if (InvitSys.whitelist.contains(uuid)) {
             return;
         }
 

@@ -2,6 +2,7 @@ package com.rock_mc.invitation_system;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -236,7 +237,7 @@ public class PlayerCommand implements CommandExecutor {
                 Log.player(player, "推薦人", parent.name);
 
                 String kidStr = null;
-                for (UUID playerUid : playerInfo.childId) {
+                for (UUID uuid : playerInfo.childId) {
                     PlayerInfo childInfo = InvitSys.playerData.findPlayer(playerInfo.parentId);
                     if (kidStr == null) {
                         kidStr = childInfo.name;
@@ -260,14 +261,12 @@ public class PlayerCommand implements CommandExecutor {
                 String unblockPlayerName = args[1];
                 Log.player(player, "將使用者移出黑名單", ChatColor.GREEN, unblockPlayerName);
 
-                Player unblockPlayer = Bukkit.getPlayer(unblockPlayerName);
+                PlayerInfo unblockPlayer = InvitSys.playerData.findPlayer(unblockPlayerName);
                 if (unblockPlayer == null) {
                     Log.player(player, "查無此玩家", unblockPlayerName);
                     return true;
                 }
-
-                PlayerInfo playerInfo = new PlayerInfo(unblockPlayer);
-                InvitSys.blacklist.remove(playerInfo.uuid);
+                InvitSys.blacklist.remove(unblockPlayer.uuid);
 
                 Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
             } else if (args[0].equalsIgnoreCase("block")) {
@@ -302,12 +301,16 @@ public class PlayerCommand implements CommandExecutor {
                     blockSec = Integer.parseInt(args[5]);
                 }
 
-                Player blockPlayer = Bukkit.getPlayer(blockPlayerName);
-                if (blockPlayer == null) {
+                PlayerInfo playerInfo = InvitSys.playerData.findPlayer(blockPlayerName);
+                if (playerInfo == null) {
                     Log.player(player, "查無此玩家", blockPlayerName);
                     return true;
                 }
-                PlayerInfo playerInfo = new PlayerInfo(blockPlayer);
+                OfflinePlayer blockPlayer = Bukkit.getOfflinePlayer(playerInfo.uuid);
+                if (blockPlayer == null) {
+                    Log.player(player, "伺服器查無此玩家", blockPlayerName);
+                    return true;
+                }
 
                 InvitSys.addBlacklist(blockPlayer, blockDay, blockHour, blockMin, blockSec);
                 InvitSys.failList.remove(playerInfo.uuid);

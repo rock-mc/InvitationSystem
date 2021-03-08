@@ -7,8 +7,8 @@ public class Prisoner {
     public long basicTime;
     public long expiryTime;
 
-    public Prisoner(UUID uid, int day, int hour, int min, int sec){
-        this.uuid = uid;
+    public Prisoner(UUID playerUUID, int day, int hour, int min, int sec){
+        this.uuid = playerUUID;
 
         basicTime = java.time.Instant.now().getEpochSecond();
         setExpiryTime(day, hour, min, sec);

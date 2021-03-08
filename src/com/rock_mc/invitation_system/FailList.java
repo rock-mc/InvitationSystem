@@ -34,10 +34,10 @@ public class FailList {
         playerList = new HashSet<>();
     }
 
-    public FailVerifyPlayer getFailVerifyPlayer(UUID playerUid){
+    public FailVerifyPlayer getFailVerifyPlayer(UUID uuid){
         FailVerifyPlayer result = null;
         for(FailVerifyPlayer failVerifyPlayer : playerList){
-            if(failVerifyPlayer.uid.equals(playerUid)){
+            if(failVerifyPlayer.uuid.equals(uuid)){
                 result = failVerifyPlayer;
                 break;
             }
@@ -45,13 +45,13 @@ public class FailList {
         return result;
     }
 
-    public void add(UUID playerUid) throws IOException {
+    public void add(UUID uuid) throws IOException {
 
-        FailVerifyPlayer currentPrisoner = getFailVerifyPlayer(playerUid);
+        FailVerifyPlayer currentPrisoner = getFailVerifyPlayer(uuid);
         if(currentPrisoner != null) {
             return;
         }
-        currentPrisoner = new FailVerifyPlayer(playerUid);
+        currentPrisoner = new FailVerifyPlayer(uuid);
         playerList.add(currentPrisoner);
         save();
     }
@@ -67,11 +67,11 @@ public class FailList {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(UUID playerUid) throws IOException {
+    public void remove(UUID uuid) throws IOException {
 
         FailVerifyPlayer currentPrisoner = null;
         for(FailVerifyPlayer failVerifyPlayer : playerList){
-            if(failVerifyPlayer.uid.equals(playerUid)){
+            if(failVerifyPlayer.uuid.equals(uuid)){
                 currentPrisoner = failVerifyPlayer;
                 break;
             }
@@ -84,7 +84,7 @@ public class FailList {
         save();
     }
 
-    public boolean contains(UUID playerUid) {
-        return getFailVerifyPlayer(playerUid) != null;
+    public boolean contains(UUID uuid) {
+        return getFailVerifyPlayer(uuid) != null;
     }
 }
