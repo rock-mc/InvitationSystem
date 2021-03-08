@@ -36,10 +36,15 @@ public class InvitSys {
 
         try {
             playerData = new PlayerData("plugins/" + APP_NAME + "/playerdata.json");
+            Log.server("Load player data", "Complete");
             whitelist = new Whitelist("plugins/" + APP_NAME + "/whitelist.json");
+            Log.server("Load whitelist", "Complete");
             blacklist = new Blacklist("plugins/" + APP_NAME + "/blacklist.json");
+            Log.server("Load blacklist", "Complete");
             failList = new FailList("plugins/" + APP_NAME + "/faillist.json");
+            Log.server("Load faillist", "Complete");
         } catch (Exception e) {
+            Log.server(ChatColor.RED + "ERROR!! Load file fails");
             return;
         }
         freezePlayerSet = new HashSet<>();

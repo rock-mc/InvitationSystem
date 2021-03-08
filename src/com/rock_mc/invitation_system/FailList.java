@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class FailList {
-    public ArrayList<FailVerifyPlayer> playerList;
+    public HashSet<FailVerifyPlayer> playerList;
     private String filePath;
 
     public FailList(String loadFile) throws Exception {
@@ -20,16 +21,16 @@ public class FailList {
         Path p = Path.of(loadFile);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, new TypeToken<List<FailVerifyPlayer>>(){}.getType());
+            playerList = new Gson().fromJson(fileString, new TypeToken<HashSet<FailVerifyPlayer>>(){}.getType());
         }
         else{
-            playerList = new ArrayList<>();
+            playerList = new HashSet<>();
         }
     }
 
     public FailList() {
         filePath = null;
-        playerList = new ArrayList<>();
+        playerList = new HashSet<>();
     }
 
     public FailVerifyPlayer getFailVerifyPlayer(String playerUid){

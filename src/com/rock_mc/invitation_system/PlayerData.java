@@ -20,7 +20,7 @@ public class PlayerData {
         Path p = Path.of(filePath);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, new TypeToken<List<PlayerInfo>>(){}.getType());
+            playerList = new Gson().fromJson(fileString, new TypeToken<HashSet<PlayerInfo>>(){}.getType());
         }
         else {
             playerList = new HashSet<>();

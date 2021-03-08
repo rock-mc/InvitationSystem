@@ -184,10 +184,6 @@ public class PlayerCommand implements CommandExecutor {
                 Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
 
             } else if (args[0].equalsIgnoreCase("info")) {
-                if (player != null && !player.isOp()) {
-                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
-                    return true;
-                }
 
                 if (args.length != 2) {
                     showDefaultCmd(player);

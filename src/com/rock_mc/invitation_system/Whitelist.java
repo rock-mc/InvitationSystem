@@ -22,7 +22,7 @@ public class Whitelist {
         Path p = Path.of(loadFile);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, new TypeToken<Set<String>>(){}.getType());
+            playerList = new Gson().fromJson(fileString, new TypeToken<HashSet<String>>(){}.getType());
         }
         else{
             playerList = new HashSet<>();

@@ -89,7 +89,7 @@ public class EventListener implements Listener {
         if (p.expiryTime == 0) {
             kickMsg = "抱歉!你已經被列為黑名單!";
         } else {
-            kickMsg = "抱歉!你已經被列為黑名單!刑期尚有 ";
+            kickMsg = "抱歉!你已經被列為黑名單!\n刑期尚有 ";
 
             long expiryTime = p.basicTime + p.expiryTime;
             expiryTime -= java.time.Instant.now().getEpochSecond();

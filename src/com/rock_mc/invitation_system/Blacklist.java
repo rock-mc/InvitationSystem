@@ -22,7 +22,7 @@ public class Blacklist {
         Path p = Path.of(loadFile);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, new TypeToken<Set<Prisoner>>(){}.getType());
+            playerList = new Gson().fromJson(fileString, new TypeToken<HashSet<Prisoner>>(){}.getType());
         }
         else{
             playerList = new HashSet<>();
