@@ -113,7 +113,16 @@ public class PlayerCommand implements CommandExecutor {
                 Log.server("請在遊戲中下指令");
             }
 
-            if (args[0].equalsIgnoreCase("on")) {
+            if (args[0].equalsIgnoreCase("off")) {
+                if (player != null && !player.isOp()) {
+                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                    return true;
+                }
+
+                InvitSys.enable = false;
+                Log.player(player, "邀請系統已經關閉", ChatColor.BLACK, "Off");
+
+            } else if (args[0].equalsIgnoreCase("on")) {
                 if (player != null && !player.isOp()) {
                     Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
