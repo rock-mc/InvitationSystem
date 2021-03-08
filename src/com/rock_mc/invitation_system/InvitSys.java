@@ -56,20 +56,20 @@ public class InvitSys {
         PlayerInfo currentPlayer = new PlayerInfo(player, 0);
 
         // 從白名單中移除
-        if(whitelist.contains(currentPlayer.uid)){
-            whitelist.remove(currentPlayer.uid);
+        if(whitelist.contains(currentPlayer.uuid)){
+            whitelist.remove(currentPlayer.uuid);
         }
 
         // 設定使用者資料
         playerData.add(currentPlayer);
         // 取得使用者資料
-        currentPlayer = playerData.findPlayer(currentPlayer.uid);
+        currentPlayer = playerData.findPlayer(currentPlayer.uuid);
         // 將邀請碼清空
         currentPlayer.resetCode();
         // 儲存
         playerData.save();
 
-        blacklist.add(currentPlayer.uid, day, hour, min, sec);
+        blacklist.add(currentPlayer.uuid, day, hour, min, sec);
         Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 加入至黑名單");
         return true;
     }
@@ -78,21 +78,21 @@ public class InvitSys {
         PlayerInfo currentPlayer = new PlayerInfo(player, invitQuota);
 
         // 從黑名單中移除
-        if(blacklist.contains(currentPlayer.uid)){
+        if(blacklist.contains(currentPlayer.uuid)){
             Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 從黑名單中移除");
-            blacklist.remove(currentPlayer.uid);
+            blacklist.remove(currentPlayer.uuid);
         }
 
         // 設定使用者資料
         playerData.add(currentPlayer);
-        whitelist.add(currentPlayer.uid);
+        whitelist.add(currentPlayer.uuid);
         return true;
     }
 
     public static boolean addWhitelist(Player player, String invitCode) throws IOException {
 
         PlayerInfo parent = null;
-        for(String playerUid : whitelist.playerList){
+        for(UUID playerUid : whitelist.playerList){
             PlayerInfo p = playerData.findPlayer(playerUid);
             if(p.invitationCode.contains(invitCode)){
                 parent = p;
@@ -104,11 +104,11 @@ public class InvitSys {
             return false;
         }
         PlayerInfo newPlayer = new PlayerInfo(player, InvitSys.DEFAULT_INVIT_QUOTA);
-        parent.childId.add(newPlayer.uid);
-        newPlayer.parentId = parent.uid;
+        parent.childId.add(newPlayer.uuid);
+        newPlayer.parentId = parent.uuid;
 
         playerData.add(newPlayer);
-        whitelist.add(newPlayer.uid);
+        whitelist.add(newPlayer.uuid);
 
         return true;
     }

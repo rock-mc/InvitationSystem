@@ -7,13 +7,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Whitelist {
-    public HashSet<String> playerList;
+    public HashSet<UUID> playerList;
     private String filePath;
 
     public Whitelist(String loadFile) throws Exception {
@@ -22,7 +19,7 @@ public class Whitelist {
         Path p = Path.of(loadFile);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, new TypeToken<HashSet<String>>(){}.getType());
+            playerList = new Gson().fromJson(fileString, new TypeToken<HashSet<UUID>>(){}.getType());
         }
         else{
             playerList = new HashSet<>();
@@ -34,7 +31,7 @@ public class Whitelist {
         playerList = new HashSet<>();
     }
 
-    public void add(String playerUid) throws IOException {
+    public void add(UUID playerUid) throws IOException {
         if (playerList.contains(playerUid)){
             return;
         }
@@ -53,14 +50,14 @@ public class Whitelist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(String playerUid) {
+    public void remove(UUID playerUid) {
         if (!playerList.contains(playerUid)){
             return;
         }
         playerList.remove(playerUid);
     }
 
-    public boolean contains(String player_uid) {
+    public boolean contains(UUID player_uid) {
         return playerList.contains(player_uid);
     }
 }

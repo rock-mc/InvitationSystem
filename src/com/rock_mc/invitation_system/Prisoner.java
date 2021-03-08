@@ -1,12 +1,14 @@
 package com.rock_mc.invitation_system;
 
+import java.util.UUID;
+
 public class Prisoner {
-    public String uid;
+    public UUID uuid;
     public long basicTime;
     public long expiryTime;
 
-    public Prisoner(String uid, int day, int hour, int min, int sec){
-        this.uid = uid;
+    public Prisoner(UUID uid, int day, int hour, int min, int sec){
+        this.uuid = uid;
 
         basicTime = java.time.Instant.now().getEpochSecond();
         setExpiryTime(day, hour, min, sec);

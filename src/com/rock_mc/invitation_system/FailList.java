@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 public class FailList {
     public HashSet<FailVerifyPlayer> playerList;
@@ -33,7 +34,7 @@ public class FailList {
         playerList = new HashSet<>();
     }
 
-    public FailVerifyPlayer getFailVerifyPlayer(String playerUid){
+    public FailVerifyPlayer getFailVerifyPlayer(UUID playerUid){
         FailVerifyPlayer result = null;
         for(FailVerifyPlayer failVerifyPlayer : playerList){
             if(failVerifyPlayer.uid.equals(playerUid)){
@@ -44,7 +45,7 @@ public class FailList {
         return result;
     }
 
-    public void add(String playerUid) throws IOException {
+    public void add(UUID playerUid) throws IOException {
 
         FailVerifyPlayer currentPrisoner = getFailVerifyPlayer(playerUid);
         if(currentPrisoner != null) {
@@ -66,7 +67,7 @@ public class FailList {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(String playerUid) throws IOException {
+    public void remove(UUID playerUid) throws IOException {
 
         FailVerifyPlayer currentPrisoner = null;
         for(FailVerifyPlayer failVerifyPlayer : playerList){
@@ -83,7 +84,7 @@ public class FailList {
         save();
     }
 
-    public boolean contains(String playerUid) {
+    public boolean contains(UUID playerUid) {
         return getFailVerifyPlayer(playerUid) != null;
     }
 }

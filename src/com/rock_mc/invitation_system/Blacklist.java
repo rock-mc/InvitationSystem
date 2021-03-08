@@ -7,10 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Blacklist {
     public HashSet<Prisoner> playerList;
@@ -34,10 +31,10 @@ public class Blacklist {
         playerList = new HashSet<>();
     }
 
-    public Prisoner getPrisoner(String playerUid){
+    public Prisoner getPrisoner(UUID playerUid){
         Prisoner result = null;
         for(Prisoner prisoner : playerList){
-            if(prisoner.uid.equals(playerUid)){
+            if(prisoner.uuid.equals(playerUid)){
                 result = prisoner;
                 break;
             }
@@ -45,7 +42,7 @@ public class Blacklist {
         return result;
     }
 
-    public void add(String playerUid, int day, int hour, int min, int sec) throws IOException {
+    public void add(UUID playerUid, int day, int hour, int min, int sec) throws IOException {
 
         Prisoner currentPrisoner = getPrisoner(playerUid);
         if(currentPrisoner != null){
@@ -69,11 +66,11 @@ public class Blacklist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(String playerUid) throws IOException {
+    public void remove(UUID playerUid) throws IOException {
 
         Prisoner currentPrisoner = null;
         for(Prisoner prisoner : playerList){
-            if(prisoner.uid.equals(playerUid)){
+            if(prisoner.uuid.equals(playerUid)){
                 currentPrisoner = prisoner;
                 break;
             }
@@ -86,7 +83,7 @@ public class Blacklist {
         save();
     }
 
-    public boolean contains(String playerUid) {
+    public boolean contains(UUID playerUid) {
         return getPrisoner(playerUid) != null;
     }
 }

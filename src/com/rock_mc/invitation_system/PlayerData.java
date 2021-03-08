@@ -7,9 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.UUID;
 
 public class PlayerData {
     public HashSet<PlayerInfo> playerList;
@@ -34,11 +33,11 @@ public class PlayerData {
         }
         return false;
     }
-    public PlayerInfo findPlayer(String player_uid){
+    public PlayerInfo findPlayer(UUID playerUid){
         PlayerInfo result = null;
 
         for(PlayerInfo p : playerList){
-            if(p.uid.equals(player_uid)){
+            if(p.uuid.equals(playerUid)){
                 result = p;
                 break;
             }
@@ -46,9 +45,9 @@ public class PlayerData {
 
         return result;
     }
-    public boolean contains(String player_uid){
+    public boolean contains(UUID playerUid){
         for(PlayerInfo p : playerList){
-            if(p.uid.equals(player_uid)){
+            if(p.uuid.equals(playerUid)){
                 return true;
             }
         }
@@ -57,7 +56,7 @@ public class PlayerData {
 
     public void add(PlayerInfo playerInfo) throws IOException {
 
-        PlayerInfo tempPlayer = findPlayer(playerInfo.uid);
+        PlayerInfo tempPlayer = findPlayer(playerInfo.uuid);
         if(tempPlayer == null){
             playerList.add(playerInfo);
         }

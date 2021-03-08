@@ -3,18 +3,19 @@ package com.rock_mc.invitation_system;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class PlayerInfo {
     public String name;
-    public String uid;
-    public String parentId;
-    public ArrayList<String> childId;
+    public UUID uuid;
+    public UUID parentId;
+    public ArrayList<UUID> childId;
     public int invitationQuota;
     public ArrayList<String> invitationCode;
 
     public PlayerInfo() {
         name = null;
-        uid = null;
+        uuid = null;
         parentId = null;
         childId = new ArrayList<>();
         invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
@@ -23,7 +24,7 @@ public class PlayerInfo {
 
     public PlayerInfo(Player player) {
         name = player.getName();
-        uid = player.getUniqueId().toString();
+        uuid = player.getUniqueId();
         parentId = null;
         childId = new ArrayList<>();
         invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
@@ -32,7 +33,7 @@ public class PlayerInfo {
 
     public PlayerInfo(Player player, int invitQuota) {
         name = player.getName();
-        uid = player.getUniqueId().toString();
+        uuid = player.getUniqueId();
         parentId = null;
         childId = new ArrayList<>();
         invitationQuota = invitQuota;

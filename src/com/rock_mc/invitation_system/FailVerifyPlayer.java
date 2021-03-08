@@ -1,10 +1,12 @@
 package com.rock_mc.invitation_system;
 
+import java.util.UUID;
+
 public class FailVerifyPlayer {
-    public String uid;
+    public UUID uid;
     public int failTime;
-    public FailVerifyPlayer(String player_uid){
-        uid = player_uid;
+    public FailVerifyPlayer(UUID playerUid){
+        uid = playerUid;
         failTime = 0;
     }
 }

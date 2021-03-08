@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class EventListener implements Listener {
     private final float CHECK_TIME = 0.5F; //    sec
@@ -23,7 +24,7 @@ public class EventListener implements Listener {
 
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
-        final String uid = player.getUniqueId().toString();
+        final UUID uid = player.getUniqueId();
 
         if (!InvitSys.enable) {
             return;
@@ -72,14 +73,14 @@ public class EventListener implements Listener {
     public void onPlayerLogin(PlayerLoginEvent event) throws IOException {
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
-        final String uid = player.getUniqueId().toString();
+        final UUID uuid = player.getUniqueId();
 
-        if (!InvitSys.blacklist.contains(uid)) {
+        if (!InvitSys.blacklist.contains(uuid)) {
             return;
         }
-        Prisoner p = InvitSys.blacklist.getPrisoner(uid);
+        Prisoner p = InvitSys.blacklist.getPrisoner(uuid);
         if (p.isExpiry()) {
-            InvitSys.blacklist.remove(uid);
+            InvitSys.blacklist.remove(uuid);
             return;
         }
         // in black list and not expiry
@@ -112,7 +113,7 @@ public class EventListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
-        final String uid = player.getUniqueId().toString();
+        final UUID uid = player.getUniqueId();
 
         if (InvitSys.whitelist.contains(uid)) {
             return;

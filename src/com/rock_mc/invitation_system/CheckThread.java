@@ -25,11 +25,11 @@ public class CheckThread extends Thread {
         PlayerInfo playerInfo = new PlayerInfo(player, 0);
 
         try {
-            InvitSys.failList.add(playerInfo.uid);
+            InvitSys.failList.add(playerInfo.uuid);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        FailVerifyPlayer failPlayer = InvitSys.failList.getFailVerifyPlayer(playerInfo.uid);
+        FailVerifyPlayer failPlayer = InvitSys.failList.getFailVerifyPlayer(playerInfo.uuid);
         Log.player(player, "您尚有 " + ChatColor.RED + (InvitSys.MAX_RETRY_TIME - failPlayer.failTime) + ChatColor.WHITE + " 次輸入機會");
 
         long sleepTime = (long) (1000 * CHECK_TIME);
@@ -40,7 +40,7 @@ public class CheckThread extends Thread {
                 e.printStackTrace();
             }
 
-            if (InvitSys.whitelist.contains(playerInfo.uid)) {
+            if (InvitSys.whitelist.contains(playerInfo.uuid)) {
                 break;
             }
             if(!player.isOnline()){
@@ -48,7 +48,7 @@ public class CheckThread extends Thread {
             }
         }
         Event event;
-        if (InvitSys.whitelist.contains(playerInfo.uid)) {
+        if (InvitSys.whitelist.contains(playerInfo.uuid)) {
             event = new InvitJoinEvent(true, player, "歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!");
             InvitSys.freezePlayerSet.remove(player.getUniqueId());
         }
