@@ -13,26 +13,24 @@ import java.io.IOException;
 public class PlayerCommand implements CommandExecutor {
     private void showDefaultCmd(Player player) {
 
-        if(player.isOp()){
+        if (player.isOp()) {
             Log.player(player, "verify | gencode | block | unblock");
-        }
-        else{
-            if(player != null){
+        } else {
+            if (player != null) {
                 PlayerInfo playerInfo = new PlayerInfo(player);
                 if (InvitSys.whitelist.contains(playerInfo.uid)) {
                     Log.player(player, "gencode");
                 } else {
                     Log.player(player, "verify <invttation code>");
                 }
-            }
-            else{
+            } else {
                 Log.player(player, "verify | gencode | block | unblock");
             }
         }
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args){
+    public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 
         Log.server("recv cmd", command.getName());
         Log.server("recv args", args);
@@ -109,10 +107,38 @@ public class PlayerCommand implements CommandExecutor {
                     playerInfo.invitationCode.add(invitCode);
                     InvitSys.playerData.save();
                 }
+            } else if (args[0].equalsIgnoreCase("verify")) {
+                Log.server("請在遊戲中下指令");
+            } else if (args[0].equalsIgnoreCase("gencode")) {
+                Log.server("請在遊戲中下指令");
             }
-//            Log.server("請在遊戲中下指令");
+            
+            if (args[0].equalsIgnoreCase("unblock")) {
+                if (player != null && !player.isOp()) {
+                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                    return true;
+                }
 
-            if (args[0].equalsIgnoreCase("block")) {
+                if (args.length < 2) {
+                    showDefaultCmd(player);
+                    return true;
+                }
+
+                String unblockPlayerName = args[1];
+                Log.player(player, "將使用者移出黑名單", ChatColor.RED, unblockPlayerName);
+
+                Player unblockPlayer = Bukkit.getPlayer(unblockPlayerName);
+                if (unblockPlayer == null) {
+                    Log.player(player, "查無此玩家", unblockPlayerName);
+                    return true;
+                }
+
+                PlayerInfo playerInfo = new PlayerInfo(unblockPlayer);
+                InvitSys.blacklist.remove(playerInfo.uid);
+
+                Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
+            }
+            else if (args[0].equalsIgnoreCase("block")) {
 
                 if (player != null && !player.isOp()) {
                     Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");

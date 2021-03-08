@@ -8,21 +8,21 @@ import java.util.UUID;
 
 public class Util {
 
-    static int SEC = 1;
-    static int MIN = 60 * SEC;
-    static int HOUR = 60 * MIN;
-    static int DAY = 24 * HOUR;
+    static final int SEC = 1;
+    static final int MIN = 60 * SEC;
+    static final int HOUR = 60 * MIN;
+    static final int DAY = 24 * HOUR;
 
-    static void mkdir(String foler_path) {
-        File directory = new File(foler_path);
+    static void mkdir(String folderPath) {
+        File directory = new File(folderPath);
         if (directory.exists()) {
             return;
         }
         directory.mkdirs();
     }
 
-    static void writeFile(String file_path, String data) throws IOException {
-        File file = new File(file_path);
+    static void writeFile(String filePath, String data) throws IOException {
+        File file = new File(filePath);
         // creates the file
         file.createNewFile();
         // creates a FileWriter Object
@@ -51,16 +51,16 @@ public class Util {
     }
     static String timeToStr(long day, long hour, long min, long sec){
         String result = "";
-        if(day != 0){
+        if(day > 0){
             result += " " + day + " 天";
         }
-        if(hour != 0){
+        if(hour > 0){
             result += " " + hour + " 小時";
         }
-        if(min != 0){
+        if(min > 0){
             result += " " + min + " 分鐘";
         }
-        if(sec != 0){
+        if(sec > 0){
             result += " " + sec + " 秒";
         }
         return result;
