@@ -49,4 +49,20 @@ public class Util {
         }
         return result;
     }
+    static String timeToStr(long day, long hour, long min, long sec){
+        String result = "";
+        if(day != 0){
+            result += " " + day + " 天";
+        }
+        if(hour != 0){
+            result += " " + hour + " 小時";
+        }
+        if(min != 0){
+            result += " " + min + " 分鐘";
+        }
+        if(sec != 0){
+            result += " " + sec + " 秒";
+        }
+        return result;
+    }
 }

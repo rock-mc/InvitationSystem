@@ -14,7 +14,7 @@ public class EventListener implements Listener {
     private final float CHECK_TIME = 0.5F; //    sec
     private final float DEFAULT_WALK_SPEED = 0.2F;
 
-    private void resetPlayer(Player player){
+    private void resetPlayer(Player player) {
         player.setWalkSpeed(DEFAULT_WALK_SPEED);
     }
 
@@ -25,7 +25,7 @@ public class EventListener implements Listener {
         final String name = player.getDisplayName();
         final String uid = player.getUniqueId().toString();
 
-        if(!InvitSys.enable){
+        if (!InvitSys.enable) {
             return;
         }
 
@@ -35,10 +35,9 @@ public class EventListener implements Listener {
             return;
         }
         if (player.isOp()) {
-            if(InvitSys.addWhitelist(player, InvitSys.DEFAULT_INVIT_QUOTA)){
+            if (InvitSys.addWhitelist(player, InvitSys.DEFAULT_INVIT_QUOTA)) {
                 Log.player(player, "親愛的 OP 您已經自動被加入白名單");
-            }
-            else{
+            } else {
                 Log.player(player, "自動加入白名單失敗", ChatColor.RED, "不明原因");
             }
             resetPlayer(player);
@@ -53,14 +52,14 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onInvitJoin(InvitJoinEvent event){
+    public void onInvitJoin(InvitJoinEvent event) {
         Player player = event.getPlayer();
         Log.broadcast(event.getMessage());
         resetPlayer(player);
     }
 
     @EventHandler
-    public void onInvitKick(InvitKickEvent event){
+    public void onInvitKick(InvitKickEvent event) {
         Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(InvitSys.plugin, new Runnable() {
             public void run() {
@@ -79,13 +78,34 @@ public class EventListener implements Listener {
             return;
         }
         Prisoner p = InvitSys.blacklist.getPrisoner(uid);
-        if (p.isExpiry()){
+        if (p.isExpiry()) {
             InvitSys.blacklist.remove(uid);
             return;
         }
         // in black list and not expiry
         // BLOCK !!!!!!!
-        event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "抱歉!你已經被列為黑名單!");
+
+        String kickMsg;
+        if (p.expiryTime == 0) {
+            kickMsg = "抱歉!你已經被列為黑名單!";
+        } else {
+            kickMsg = "抱歉!你已經被列為黑名單!刑期尚有";
+
+            long expiryTime = p.basicTime + p.expiryTime;
+            expiryTime -= java.time.Instant.now().getEpochSecond();
+
+            long day = expiryTime / Util.DAY;
+            expiryTime %= Util.DAY;
+            long hour = expiryTime / Util.HOUR;
+            expiryTime %= Util.HOUR;
+            long min = expiryTime / Util.MIN;
+            expiryTime %= Util.MIN;
+            long sec = expiryTime;
+
+            kickMsg += Util.timeToStr(day, hour, min, sec);
+        }
+
+        event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMsg);
     }
 
     @EventHandler
@@ -101,10 +121,11 @@ public class EventListener implements Listener {
         event.setCancelled(true);
         Log.player(player, "因為您尚未通過驗證，因此訊息並未送出", event.getMessage());
     }
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (!InvitSys.freezePlayerSet.contains(player.getUniqueId())){
+        if (!InvitSys.freezePlayerSet.contains(player.getUniqueId())) {
             return;
         }
         event.setCancelled(true);

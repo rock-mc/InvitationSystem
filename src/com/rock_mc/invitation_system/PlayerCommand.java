@@ -156,10 +156,11 @@ public class PlayerCommand implements CommandExecutor {
 
                 if (blockPlayer.isOnline()) {
                     String blockMsg;
-                    if (blockDay == 0) {
+                    if (blockDay == 0 && blockHour == 0 && blockMin == 0 && blockSec == 0) {
                         blockMsg = "抱歉，你已經被永久加入黑名單";
                     } else {
-                        blockMsg = "抱歉，你已經被加入黑名單，刑期 " + blockDay + " 天";
+                        blockMsg = "抱歉，你已經被加入黑名單，刑期";
+                        blockMsg += Util.timeToStr(blockDay, blockHour, blockMin, blockSec);
                     }
 
                     Event event = new InvitKickEvent(false, blockPlayer, blockMsg);
