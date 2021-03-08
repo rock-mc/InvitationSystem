@@ -112,8 +112,77 @@ public class PlayerCommand implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("gencode")) {
                 Log.server("請在遊戲中下指令");
             }
-            
-            if (args[0].equalsIgnoreCase("unblock")) {
+
+            if (args[0].equalsIgnoreCase("info")) {
+                if (player != null && !player.isOp()) {
+                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                    return true;
+                }
+
+                if (args.length < 2) {
+                    showDefaultCmd(player);
+                    return true;
+                }
+
+                String playerName = args[1];
+                Log.player(player, "查詢使用者", ChatColor.GREEN, playerName);
+
+                Player unblockPlayer = Bukkit.getPlayer(playerName);
+                if (unblockPlayer == null) {
+                    Log.player(player, "查無此玩家", playerName);
+                    return true;
+                }
+                PlayerInfo playerInfo = new PlayerInfo(unblockPlayer);
+
+                Log.player(player, "============================");
+                Log.player(player, "玩家名稱", playerInfo.name);
+
+                if (unblockPlayer.isOp()){
+                    Log.player(player, "驗證狀態", ChatColor.GOLD, "Operator");
+                    Log.player(player, "邀請配額", "∞");
+                }
+                else if (InvitSys.whitelist.contains(playerInfo.uid)){
+                    Log.player(player, "驗證狀態", ChatColor.GREEN, "通過驗證");
+                    Log.player(player, "邀請配額", playerInfo.invitationQuota + "");
+                }
+                else if (InvitSys.blacklist.contains(playerInfo.uid)){
+                    Log.player(player, "驗證狀態", ChatColor.RED, "隔離中");
+
+                    Prisoner p = InvitSys.blacklist.getPrisoner(playerInfo.uid);
+
+                    long expiryTime = p.basicTime + p.expiryTime;
+                    expiryTime -= java.time.Instant.now().getEpochSecond();
+
+                    long day = expiryTime / Util.DAY;
+                    expiryTime %= Util.DAY;
+                    long hour = expiryTime / Util.HOUR;
+                    expiryTime %= Util.HOUR;
+                    long min = expiryTime / Util.MIN;
+                    expiryTime %= Util.MIN;
+                    long sec = expiryTime;
+
+                    String prisonTime = Util.timeToStr(day, hour, min, sec);
+
+                    Log.player(player, "刑期尚有", ChatColor.RED, prisonTime);
+                    Log.player(player, "邀請配額", playerInfo.invitationQuota + "");
+                }
+
+                PlayerInfo parent = InvitSys.playerData.findPlayer(playerInfo.parentId);
+                Log.player(player, "推薦人", parent.name);
+
+                String kidStr = null;
+                for(String playerUid : playerInfo.childId){
+                    PlayerInfo childInfo = InvitSys.playerData.findPlayer(playerInfo.parentId);
+                    if (kidStr == null){
+                        kidStr = childInfo.name;
+                    }
+                    else {
+                        kidStr += " " + childInfo.name;
+                    }
+                }
+                Log.player(player, "推薦玩家: " + kidStr);
+
+            } else if (args[0].equalsIgnoreCase("unblock")) {
                 if (player != null && !player.isOp()) {
                     Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
@@ -125,7 +194,7 @@ public class PlayerCommand implements CommandExecutor {
                 }
 
                 String unblockPlayerName = args[1];
-                Log.player(player, "將使用者移出黑名單", ChatColor.RED, unblockPlayerName);
+                Log.player(player, "將使用者移出黑名單", ChatColor.GREEN, unblockPlayerName);
 
                 Player unblockPlayer = Bukkit.getPlayer(unblockPlayerName);
                 if (unblockPlayer == null) {
@@ -185,7 +254,7 @@ public class PlayerCommand implements CommandExecutor {
                     if (blockDay == 0 && blockHour == 0 && blockMin == 0 && blockSec == 0) {
                         blockMsg = "抱歉，你已經被永久加入黑名單";
                     } else {
-                        blockMsg = "抱歉，你已經被加入黑名單，刑期";
+                        blockMsg = "抱歉，你已經被加入黑名單，刑期 ";
                         blockMsg += Util.timeToStr(blockDay, blockHour, blockMin, blockSec);
                     }
 
