@@ -5,9 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class InvitSys {
@@ -26,7 +24,7 @@ public class InvitSys {
     public static Whitelist whitelist;
     public static Blacklist blacklist;
     public static FailList failList;
-    public static HashSet<UUID> freezePlayerList;
+    public static HashSet<UUID> freezePlayerSet;
 
     public static boolean enable;
 
@@ -44,7 +42,7 @@ public class InvitSys {
         } catch (Exception e) {
             return;
         }
-        freezePlayerList = new HashSet<>();
+        freezePlayerSet = new HashSet<>();
 
         enable = true;
     }
