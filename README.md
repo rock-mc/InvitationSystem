@@ -21,7 +21,7 @@
 如果驗證失敗，請確認邀請碼後重新輸入。失敗三次則會直接列入黑名單。  
 ### invits block \<player> [day] [hour] [min] [sec]
 將該玩家加入到黑名單中，發出的邀請碼作廢。  
-如果沒有設定天數，該玩家視為永久剔除。  
+如果沒有設定時間，該玩家視為永久剔除。  
 ### invits unblock \<player>
 將該玩家從黑名單中移除。  
 ### invits info \<player>
