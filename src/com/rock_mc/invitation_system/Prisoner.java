@@ -5,12 +5,6 @@ public class Prisoner {
     public long basicTime;
     public long expiryTime;
 
-    public Prisoner(String uid, int day){
-        this.uid = uid;
-
-        basicTime = java.time.Instant.now().getEpochSecond();
-        setExpiryTime(day, 0, 0, 0);
-    }
     public Prisoner(String uid, int day, int hour, int min, int sec){
         this.uid = uid;
 

@@ -43,7 +43,7 @@ public class InvitSys {
         enable = true;
     }
 
-    public static boolean addBlacklist(Player player, int day) throws IOException {
+    public static boolean addBlacklist(Player player, int day, int hour, int min, int sec) throws IOException {
         PlayerInfo currentPlayer = new PlayerInfo(player, 0);
 
         // 從白名單中移除
@@ -60,7 +60,7 @@ public class InvitSys {
         // 儲存
         playerData.save();
 
-        blacklist.add(currentPlayer.uid, day);
+        blacklist.add(currentPlayer.uid, day, hour, min, sec);
         Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 加入至黑名單");
         return true;
     }

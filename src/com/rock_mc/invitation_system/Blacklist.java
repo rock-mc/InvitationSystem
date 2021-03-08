@@ -43,14 +43,14 @@ public class Blacklist {
         return result;
     }
 
-    public void add(String playerUid, int day) throws IOException {
+    public void add(String playerUid, int day, int hour, int min, int sec) throws IOException {
 
         if(contains(playerUid)){
             Prisoner currentPrisoner = getPrisoner(playerUid);
-            currentPrisoner.setExpiryTime(day, 0, 0, 0);
+            currentPrisoner.setExpiryTime(day, hour, min, sec);
         }
         else{
-            Prisoner prisoner = new Prisoner(playerUid, day);
+            Prisoner prisoner = new Prisoner(playerUid, day, hour, min, sec);
             playerList.add(prisoner);
         }
         save();
