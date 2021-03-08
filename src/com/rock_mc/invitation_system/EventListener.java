@@ -6,12 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class EventListener implements Listener {
     private final float CHECK_TIME = 0.5F; //    sec
@@ -33,7 +32,7 @@ public class EventListener implements Listener {
         }
 
         if (InvitSys.whitelist.contains(uid)) {
-            Log.server("通過邀請系統驗證", player.getDisplayName());
+            Log.broadcast("通過邀請系統驗證", player.getDisplayName());
             resetPlayer(player);
             return;
         }
@@ -49,6 +48,8 @@ public class EventListener implements Listener {
         }
         Log.player(player, name, ChatColor.RED, "請在 " + InvitSys.MAX_INPUT_CODE_TIME + " 秒內輸入邀請碼");
         player.setWalkSpeed(0.0F);
+
+        InvitSys.freezePlayerList.add(player.getUniqueId());
 
         new CheckThread(player).start();
     }
@@ -90,7 +91,7 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void on(AsyncPlayerChatEvent event) throws IOException {
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
         final String uid = player.getUniqueId().toString();
@@ -100,6 +101,14 @@ public class EventListener implements Listener {
         }
 
         event.setCancelled(true);
-        Log.player(player, "因為您尚未通過驗證，所以此訊息並未送出", event.getMessage());
+        Log.player(player, "因為您尚未通過驗證，因此訊息並未送出", event.getMessage());
+    }
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (!InvitSys.freezePlayerList.contains(player.getUniqueId())){
+            return;
+        }
+        event.setCancelled(true);
     }
 }
