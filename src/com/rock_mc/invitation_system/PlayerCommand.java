@@ -137,7 +137,7 @@ public class PlayerCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (args.length < 3) {
+                if (args.length != 3) {
                     showDefaultCmd(player);
                     return true;
                 }
@@ -160,7 +160,6 @@ public class PlayerCommand implements CommandExecutor {
                             playerInfo.invitationQuota += newQuota;
                         }
                     }
-                    InvitSys.playerData.save();
                 } else {
                     Log.player(player, "給予使用者邀請配額", ChatColor.GREEN, playerName);
 
@@ -180,8 +179,8 @@ public class PlayerCommand implements CommandExecutor {
                     } else {
                         playerInfo.invitationQuota += newQuota;
                     }
-                    InvitSys.playerData.save();
                 }
+                InvitSys.playerData.save();
                 Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
 
             } else if (args[0].equalsIgnoreCase("info")) {
@@ -190,7 +189,7 @@ public class PlayerCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (args.length < 2) {
+                if (args.length != 2) {
                     showDefaultCmd(player);
                     return true;
                 }
@@ -256,7 +255,7 @@ public class PlayerCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (args.length < 2) {
+                if (args.length != 2) {
                     showDefaultCmd(player);
                     return true;
                 }
@@ -281,7 +280,7 @@ public class PlayerCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (args.length < 2) {
+                if (args.length < 2 || 6 < args.length) {
                     showDefaultCmd(player);
                     return true;
                 }
@@ -302,7 +301,7 @@ public class PlayerCommand implements CommandExecutor {
                     blockMin = Integer.parseInt(args[4]);
                 }
                 int blockSec = 0;
-                if (args.length >= 6) {
+                if (args.length == 6) {
                     blockSec = Integer.parseInt(args[5]);
                 }
 
