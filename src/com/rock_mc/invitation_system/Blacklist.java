@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Blacklist {
-    public ArrayList<Prisoner> playerList;
+    public HashSet<Prisoner> playerList;
     private String filePath;
 
     public Blacklist(String loadFile) throws Exception {
@@ -20,16 +22,16 @@ public class Blacklist {
         Path p = Path.of(loadFile);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, new TypeToken<List<Prisoner>>(){}.getType());
+            playerList = new Gson().fromJson(fileString, new TypeToken<Set<Prisoner>>(){}.getType());
         }
         else{
-            playerList = new ArrayList<>();
+            playerList = new HashSet<>();
         }
     }
 
     public Blacklist() {
         filePath = null;
-        playerList = new ArrayList<>();
+        playerList = new HashSet<>();
     }
 
     public Prisoner getPrisoner(String playerUid){
@@ -45,8 +47,8 @@ public class Blacklist {
 
     public void add(String playerUid, int day, int hour, int min, int sec) throws IOException {
 
-        if(contains(playerUid)){
-            Prisoner currentPrisoner = getPrisoner(playerUid);
+        Prisoner currentPrisoner = getPrisoner(playerUid);
+        if(currentPrisoner != null){
             currentPrisoner.setExpiryTime(day, hour, min, sec);
         }
         else{

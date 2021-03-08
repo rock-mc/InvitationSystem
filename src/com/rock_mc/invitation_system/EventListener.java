@@ -9,8 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class EventListener implements Listener {
     private final float CHECK_TIME = 0.5F; //    sec
@@ -49,7 +47,7 @@ public class EventListener implements Listener {
         Log.player(player, name, ChatColor.RED, "請在 " + InvitSys.MAX_INPUT_CODE_TIME + " 秒內輸入邀請碼");
         player.setWalkSpeed(0.0F);
 
-        InvitSys.freezePlayerList.add(player.getUniqueId());
+        InvitSys.freezePlayerSet.add(player.getUniqueId());
 
         new CheckThread(player).start();
     }
@@ -106,7 +104,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (!InvitSys.freezePlayerList.contains(player.getUniqueId())){
+        if (!InvitSys.freezePlayerSet.contains(player.getUniqueId())){
             return;
         }
         event.setCancelled(true);

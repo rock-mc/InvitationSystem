@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PlayerData {
-    public ArrayList<PlayerInfo> playerList;
+    public HashSet<PlayerInfo> playerList;
     private String filePath;
     public PlayerData(String path) throws IOException {
         filePath = path;
@@ -22,7 +23,7 @@ public class PlayerData {
             playerList = new Gson().fromJson(fileString, new TypeToken<List<PlayerInfo>>(){}.getType());
         }
         else {
-            playerList = new ArrayList<>();
+            playerList = new HashSet<>();
         }
     }
     public boolean isRepeatCode(String invitCode){
@@ -46,15 +47,12 @@ public class PlayerData {
         return result;
     }
     public boolean contains(String player_uid){
-        boolean result = false;
-
         for(PlayerInfo p : playerList){
             if(p.uid.equals(player_uid)){
-                result = true;
-                break;
+                return true;
             }
         }
-        return result;
+        return false;
     }
 
     public void add(PlayerInfo playerInfo) throws IOException {

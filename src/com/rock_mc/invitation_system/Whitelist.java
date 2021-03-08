@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Whitelist {
-    public ArrayList<String> playerList;
+    public HashSet<String> playerList;
     private String filePath;
 
     public Whitelist(String loadFile) throws Exception {
@@ -20,16 +22,16 @@ public class Whitelist {
         Path p = Path.of(loadFile);
         if(p.toFile().exists()) {
             String fileString = Files.readString(p);
-            playerList = new Gson().fromJson(fileString, new TypeToken<List<String>>(){}.getType());
+            playerList = new Gson().fromJson(fileString, new TypeToken<Set<String>>(){}.getType());
         }
         else{
-            playerList = new ArrayList<>();
+            playerList = new HashSet<>();
         }
     }
 
     public Whitelist() {
         filePath = null;
-        playerList = new ArrayList<>();
+        playerList = new HashSet<>();
     }
 
     public void add(String playerUid) throws IOException {
