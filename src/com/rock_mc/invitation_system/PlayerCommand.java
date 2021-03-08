@@ -131,6 +131,59 @@ public class PlayerCommand implements CommandExecutor {
                 InvitSys.enable = true;
                 Log.player(player, "邀請系統已經啟動", ChatColor.GREEN, "On");
 
+            } else if (args[0].equalsIgnoreCase("set")) {
+                if (player != null && !player.isOp()) {
+                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                    return true;
+                }
+
+                if (args.length < 3) {
+                    showDefaultCmd(player);
+                    return true;
+                }
+
+                String playerName = args[1];
+                int newQuota = Integer.parseInt(args[2]);
+
+                if (playerName.equalsIgnoreCase("all")) {
+                    Log.player(player, "給予所有線上使用者邀請配額");
+
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        PlayerInfo playerInfo = InvitSys.playerData.findPlayer(p.getUniqueId().toString());
+                        if (playerInfo == null) {
+                            continue;
+                        }
+
+                        if (playerInfo.invitationQuota >= 0) {
+                            playerInfo.invitationQuota = newQuota;
+                        } else {
+                            playerInfo.invitationQuota += newQuota;
+                        }
+                    }
+                    InvitSys.playerData.save();
+                } else {
+                    Log.player(player, "給予使用者邀請配額", ChatColor.GREEN, playerName);
+
+                    Player givePlayer = Bukkit.getPlayer(playerName);
+                    if (givePlayer == null) {
+                        Log.player(player, "查無此玩家", playerName);
+                        return true;
+                    }
+                    PlayerInfo playerInfo = InvitSys.playerData.findPlayer(givePlayer.getUniqueId().toString());
+                    if (playerInfo == null) {
+                        Log.player(player, "查無此玩家", playerName);
+                        return true;
+                    }
+
+                    if (playerInfo.invitationQuota >= 0) {
+                        playerInfo.invitationQuota = newQuota;
+                    } else {
+                        playerInfo.invitationQuota += newQuota;
+                    }
+                    InvitSys.playerData.save();
+                }
+                Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
+
             } else if (args[0].equalsIgnoreCase("info")) {
                 if (player != null && !player.isOp()) {
                     Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
@@ -155,15 +208,13 @@ public class PlayerCommand implements CommandExecutor {
                 Log.player(player, "============================");
                 Log.player(player, "玩家名稱", playerInfo.name);
 
-                if (unblockPlayer.isOp()){
+                if (unblockPlayer.isOp()) {
                     Log.player(player, "驗證狀態", ChatColor.GOLD, "Operator");
                     Log.player(player, "邀請配額", "∞");
-                }
-                else if (InvitSys.whitelist.contains(playerInfo.uid)){
+                } else if (InvitSys.whitelist.contains(playerInfo.uid)) {
                     Log.player(player, "驗證狀態", ChatColor.GREEN, "通過驗證");
                     Log.player(player, "邀請配額", playerInfo.invitationQuota + "");
-                }
-                else if (InvitSys.blacklist.contains(playerInfo.uid)){
+                } else if (InvitSys.blacklist.contains(playerInfo.uid)) {
                     Log.player(player, "驗證狀態", ChatColor.RED, "隔離中");
 
                     Prisoner p = InvitSys.blacklist.getPrisoner(playerInfo.uid);
@@ -189,12 +240,11 @@ public class PlayerCommand implements CommandExecutor {
                 Log.player(player, "推薦人", parent.name);
 
                 String kidStr = null;
-                for(String playerUid : playerInfo.childId){
+                for (String playerUid : playerInfo.childId) {
                     PlayerInfo childInfo = InvitSys.playerData.findPlayer(playerInfo.parentId);
-                    if (kidStr == null){
+                    if (kidStr == null) {
                         kidStr = childInfo.name;
-                    }
-                    else {
+                    } else {
                         kidStr += " " + childInfo.name;
                     }
                 }
@@ -224,8 +274,7 @@ public class PlayerCommand implements CommandExecutor {
                 InvitSys.blacklist.remove(playerInfo.uid);
 
                 Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
-            }
-            else if (args[0].equalsIgnoreCase("block")) {
+            } else if (args[0].equalsIgnoreCase("block")) {
 
                 if (player != null && !player.isOp()) {
                     Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
