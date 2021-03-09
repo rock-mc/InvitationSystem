@@ -33,7 +33,7 @@ public class EventListener implements Listener {
             return;
         }
         if (player.isOp()) {
-            if (InvitSys.addWhitelist(player, InvitSys.DEFAULT_INVIT_QUOTA)) {
+            if (InvitSys.addWhitelist(player, player, InvitSys.DEFAULT_INVIT_QUOTA)) {
                 Log.player(player, "親愛的 OP 您已經自動被加入白名單");
             } else {
                 Log.player(player, "自動加入白名單失敗", ChatColor.RED, "不明原因");
@@ -49,7 +49,6 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onInvitJoin(InvitJoinEvent event) {
-        Player player = event.getPlayer();
         Log.broadcast(event.getMessage());
     }
 
@@ -88,16 +87,7 @@ public class EventListener implements Listener {
 
             long expiryTime = p.basicTime + p.expiryTime;
             expiryTime -= java.time.Instant.now().getEpochSecond();
-
-            long day = expiryTime / Util.DAY;
-            expiryTime %= Util.DAY;
-            long hour = expiryTime / Util.HOUR;
-            expiryTime %= Util.HOUR;
-            long min = expiryTime / Util.MIN;
-            expiryTime %= Util.MIN;
-            long sec = expiryTime;
-
-            kickMsg += Util.timeToStr(day, hour, min, sec);
+            kickMsg += Util.timeToStr(expiryTime);
         }
 
         event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMsg);
