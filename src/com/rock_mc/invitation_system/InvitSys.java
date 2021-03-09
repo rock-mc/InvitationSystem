@@ -61,10 +61,7 @@ public class InvitSys {
     public static boolean addBlacklist(Player player, Player blockPlayer, int day, int hour, int min, int sec) throws IOException {
         PlayerInfo playerInfo = playerData.getPlayer(blockPlayer.getUniqueId());
 
-        // 從白名單中移除
-        if(whitelist.contains(playerInfo.uuid)){
-            whitelist.remove(playerInfo.uuid);
-        }
+        // 不從白名單中剔除，保留驗證結果
 
         // 將邀請碼清空
         if(playerInfo.resetCode()){
@@ -74,6 +71,7 @@ public class InvitSys {
 
         blacklist.add(playerInfo.uuid, day, hour, min, sec);
         Log.player(player, "將 " + ChatColor.YELLOW + playerInfo.name + ChatColor.WHITE + " 加入至黑名單");
+        Log.player(player, "服刑時間", Util.timeToStr(day, hour, min, sec));
         return true;
     }
 
@@ -91,6 +89,7 @@ public class InvitSys {
 
     public static boolean addWhitelist(Player player, Player addPlayer, String invitCode) throws IOException {
 
+        // 找到是誰邀請 addPlayer
         PlayerInfo parent = null;
         for(UUID uuid : whitelist.playerList){
             PlayerInfo p = playerData.getPlayer(uuid);
@@ -99,18 +98,25 @@ public class InvitSys {
                 break;
             }
         }
+        // 找不到，表示沒有相符邀請碼
         if(parent == null){
             Log.player(player, ChatColor.RED + "查無此邀請碼");
             return false;
         }
 
+        // 取得玩家資料
         PlayerInfo newPlayer = playerData.getPlayer(addPlayer.getUniqueId());
+        // 設定玩家的推薦人與推薦人的推薦玩家
         parent.childId.add(newPlayer.uuid);
-        parent.invitationCode.remove(invitCode);
         newPlayer.parentId = parent.uuid;
+        // 將此邀請碼清除
+        parent.invitationCode.remove(invitCode);
+        // 設定新玩家邀請額度
         newPlayer.invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
+        // 儲存資料
         playerData.save();
 
+        // 加入至白名單
         whitelist.add(newPlayer.uuid);
 
         return true;
