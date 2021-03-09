@@ -15,10 +15,6 @@ public class EventListener implements Listener {
     private final float CHECK_TIME = 0.5F; //    sec
     private final float DEFAULT_WALK_SPEED = 0.2F;
 
-//    private void resetPlayer(Player player) {
-//        player.setWalkSpeed(DEFAULT_WALK_SPEED);
-//    }
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
 
@@ -43,7 +39,6 @@ public class EventListener implements Listener {
             return;
         }
         Log.player(player, name, ChatColor.RED, "請在 " + InvitSys.MAX_INPUT_CODE_TIME + " 秒內輸入邀請碼");
-        player.setWalkSpeed(0.0F);
 
         InvitSys.freezePlayerSet.add(player.getUniqueId());
 
