@@ -66,7 +66,7 @@ public class Blacklist {
         Util.writeFile(filePath, json_str);
     }
 
-    public void remove(UUID uuid) throws IOException {
+    public boolean remove(UUID uuid) throws IOException {
 
         Prisoner currentPrisoner = null;
         for(Prisoner prisoner : playerList){
@@ -76,11 +76,12 @@ public class Blacklist {
             }
         }
         if (currentPrisoner == null){
-            return;
+            return false;
         }
 
         playerList.remove(currentPrisoner);
         save();
+        return true;
     }
 
     public boolean contains(UUID uuid) {

@@ -18,7 +18,7 @@ public class PlayerInfo {
         uuid = null;
         parentId = null;
         childId = new ArrayList<>();
-        invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
+        invitationQuota = 0;
         invitationCode = new ArrayList<>();
     }
 
@@ -27,7 +27,7 @@ public class PlayerInfo {
         uuid = player.getUniqueId();
         parentId = null;
         childId = new ArrayList<>();
-        invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
+        invitationQuota = 0;
         invitationCode = new ArrayList<>();
     }
 
@@ -40,7 +40,11 @@ public class PlayerInfo {
         invitationCode = new ArrayList<>();
     }
 
-    public void resetCode(){
+    public boolean resetCode(){
+        if (invitationCode.size() == 0){
+            return false;
+        }
         invitationCode = new ArrayList<>();
+        return true;
     }
 }

@@ -36,13 +36,13 @@ public class InvitSys {
 
         try {
             playerData = new PlayerData("plugins/" + APP_NAME + "/playerdata.json");
-            Log.server("Load player data", "Complete");
+            Log.server("Load player data", ChatColor.GREEN,"Complete");
             whitelist = new Whitelist("plugins/" + APP_NAME + "/whitelist.json");
-            Log.server("Load whitelist", "Complete");
+            Log.server("Load whitelist", ChatColor.GREEN, "Complete");
             blacklist = new Blacklist("plugins/" + APP_NAME + "/blacklist.json");
-            Log.server("Load blacklist", "Complete");
+            Log.server("Load blacklist", ChatColor.GREEN, "Complete");
             failList = new FailList("plugins/" + APP_NAME + "/faillist.json");
-            Log.server("Load faillist", "Complete");
+            Log.server("Load faillist", ChatColor.GREEN, "Complete");
         } catch (Exception e) {
             Log.server(ChatColor.RED + "ERROR!! Load file fails");
             return;
@@ -51,41 +51,41 @@ public class InvitSys {
 
         enable = true;
     }
+    public static boolean createPlayerData(Player player) throws IOException {
+        // 建立玩家資料
+        PlayerInfo playerInfo = new PlayerInfo(player);
+        playerData.add(playerInfo);
+        return true;
+    }
 
     public static boolean addBlacklist(Player player, int day, int hour, int min, int sec) throws IOException {
-        PlayerInfo currentPlayer = new PlayerInfo(player, 0);
+        PlayerInfo playerInfo = playerData.getPlayer(player.getUniqueId());
 
         // 從白名單中移除
-        if(whitelist.contains(currentPlayer.uuid)){
-            whitelist.remove(currentPlayer.uuid);
+        if(whitelist.contains(playerInfo.uuid)){
+            whitelist.remove(playerInfo.uuid);
         }
 
-        // 設定使用者資料
-        playerData.add(currentPlayer);
-        // 取得使用者資料
-        currentPlayer = playerData.getPlayer(currentPlayer.uuid);
         // 將邀請碼清空
-        currentPlayer.resetCode();
-        // 儲存
-        playerData.save();
+        if(playerInfo.resetCode()){
+            // 如果有變動，儲存
+            playerData.save();
+        }
 
-        blacklist.add(currentPlayer.uuid, day, hour, min, sec);
-        Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 加入至黑名單");
+        blacklist.add(playerInfo.uuid, day, hour, min, sec);
+        Log.player(player, "將 " + ChatColor.YELLOW + playerInfo.name + ChatColor.WHITE + " 加入至黑名單");
         return true;
     }
 
     public static boolean addWhitelist(Player player, int invitQuota) throws IOException {
-        PlayerInfo currentPlayer = new PlayerInfo(player, invitQuota);
+        PlayerInfo playerInfo = playerData.getPlayer(player.getUniqueId());
 
         // 從黑名單中移除
-        if(blacklist.contains(currentPlayer.uuid)){
-            Log.player(player, "將 " + ChatColor.YELLOW + currentPlayer.name + ChatColor.WHITE + " 從黑名單中移除");
-            blacklist.remove(currentPlayer.uuid);
+        if (blacklist.remove(playerInfo.uuid)){
+            Log.player(player, "將 " + ChatColor.YELLOW + playerInfo.name + ChatColor.WHITE + " 從黑名單中移除");
         }
 
-        // 設定使用者資料
-        playerData.add(currentPlayer);
-        whitelist.add(currentPlayer.uuid);
+        whitelist.add(playerInfo.uuid);
         return true;
     }
 
@@ -103,11 +103,14 @@ public class InvitSys {
             Log.player(player, ChatColor.RED + "查無此邀請碼");
             return false;
         }
-        PlayerInfo newPlayer = new PlayerInfo(player, InvitSys.DEFAULT_INVIT_QUOTA);
-        parent.childId.add(newPlayer.uuid);
-        newPlayer.parentId = parent.uuid;
 
-        playerData.add(newPlayer);
+        PlayerInfo newPlayer = playerData.getPlayer(player.getUniqueId());
+        parent.childId.add(newPlayer.uuid);
+        parent.invitationCode.remove(invitCode);
+        newPlayer.parentId = parent.uuid;
+        newPlayer.invitationQuota = InvitSys.DEFAULT_INVIT_QUOTA;
+        playerData.save();
+
         whitelist.add(newPlayer.uuid);
 
         return true;

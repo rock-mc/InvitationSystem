@@ -22,6 +22,8 @@ public class EventListener implements Listener {
         final String name = player.getDisplayName();
         final UUID uuid = player.getUniqueId();
 
+        InvitSys.createPlayerData(player);
+
         if (!InvitSys.enable) {
             return;
         }

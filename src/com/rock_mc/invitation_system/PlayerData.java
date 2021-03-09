@@ -67,13 +67,11 @@ public class PlayerData {
     }
 
     public void add(PlayerInfo playerInfo) throws IOException {
-
-        PlayerInfo tempPlayer = getPlayer(playerInfo.uuid);
-        if(tempPlayer != null){
+        if (contains(playerInfo.uuid)){
             return;
         }
-        playerList.add(playerInfo);
 
+        playerList.add(playerInfo);
         save();
     }
 
