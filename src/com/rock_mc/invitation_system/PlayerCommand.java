@@ -2,7 +2,6 @@ package com.rock_mc.invitation_system;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,20 +13,18 @@ import java.util.UUID;
 
 public class PlayerCommand implements CommandExecutor {
     private void showDefaultCmd(Player player) {
-
-        if (player.isOp()) {
-            Log.player(player, "verify | gencode | block | unblock");
-        } else {
-            if (player != null) {
-                PlayerInfo playerInfo = new PlayerInfo(player);
-                if (InvitSys.whitelist.contains(playerInfo.uuid)) {
-                    Log.player(player, "gencode");
-                } else {
-                    Log.player(player, "verify <invttation code>");
-                }
-            } else {
-                Log.player(player, "verify | gencode | block | unblock");
+        if (player != null) {
+            PlayerInfo playerInfo = new PlayerInfo(player);
+            if (player.isOp()){
+                Log.player(player, "verify | gencode | block | unblock | give");
             }
+            else if (InvitSys.whitelist.contains(playerInfo.uuid)) {
+                Log.player(player, "gencode");
+            } else {
+                Log.player(player, "verify <invttation code>");
+            }
+        } else {
+            Log.player(player, "verify | gencode | block | unblock | give");
         }
     }
 
@@ -38,69 +35,79 @@ public class PlayerCommand implements CommandExecutor {
         Log.server("recv args", args);
         try {
 
-            Player player = null;
+            Player senderPlayer = null;
             if (sender instanceof Player) {
-                player = (Player) sender;
-
-                // 取得玩家資料
-                PlayerInfo playerInfo = InvitSys.playerData.getPlayer(player.getUniqueId());
-
-//            try {
+                senderPlayer = (Player) sender;
 
                 if (args.length == 0) {
-                    showDefaultCmd(player);
+                    showDefaultCmd(senderPlayer);
                 } else if (args[0].equalsIgnoreCase("verify")) {
 
-                    if (InvitSys.whitelist.contains(playerInfo.uuid)) {
-                        Log.player(player, ChatColor.GREEN + "你已經在白名單中!");
+                    // 取得下指令玩家資料
+                    PlayerInfo senderInfo = InvitSys.playerData.getPlayer(senderPlayer.getUniqueId());
+
+                    if (InvitSys.whitelist.contains(senderInfo.uuid)) {
+                        Log.player(senderPlayer, ChatColor.GREEN + "你已經在白名單中!");
                         return true;
                     }
 
                     if (args.length != 2) {
-                        showDefaultCmd(player);
+                        showDefaultCmd(senderPlayer);
                         return true;
                     }
                     String invitCode = args[1];
-//                    Log.player(player, "輸入驗證碼", ChatColor.GREEN, invitCode);
+//                    Log.senderPlayer(senderPlayer, "輸入驗證碼", ChatColor.GREEN, invitCode);
 
-                    if (InvitSys.addWhitelist(player, player, invitCode)) {
-                        Log.player(player, ChatColor.GREEN + "驗證通過!");
-                        InvitSys.failList.remove(playerInfo.uuid);
+                    if (InvitSys.addWhitelist(senderPlayer, senderPlayer, invitCode)) {
+                        Log.player(senderPlayer, ChatColor.GREEN + "驗證通過!");
+                        InvitSys.failList.remove(senderInfo.uuid);
                     } else {
-                        Log.player(player, ChatColor.RED + "驗證失敗!");
+                        Log.player(senderPlayer, ChatColor.RED + "驗證失敗!");
 
-                        InvitSys.failList.add(playerInfo.uuid);
-                        FailVerifyPlayer failPlayer = InvitSys.failList.getFailVerifyPlayer(playerInfo.uuid);
+                        // 將使用者新增至嘗試失敗清單
+                        InvitSys.failList.add(senderInfo.uuid);
+                        FailVerifyPlayer failPlayer = InvitSys.failList.getPlayer(senderInfo.uuid);
+                        // 次數++
                         failPlayer.failTime += 1;
 
-                        Log.player(player, "您尚有 " + ChatColor.RED + (InvitSys.MAX_RETRY_TIME - failPlayer.failTime) + ChatColor.WHITE + " 次輸入機會");
+                        Log.player(senderPlayer, "您尚有 " + ChatColor.RED + (InvitSys.MAX_RETRY_TIME - failPlayer.failTime) + ChatColor.WHITE + " 次輸入機會");
 
                         if (failPlayer.failTime >= InvitSys.MAX_RETRY_TIME) {
-                            InvitSys.addBlacklist(player, player, InvitSys.MAX_RETRY_FAIL_BLOCK_DAY, 0, 0, 0);
-                            InvitSys.failList.remove(playerInfo.uuid);
+                            // 錯太多次，鎖定 InvitSys.MAX_RETRY_FAIL_BLOCK_DAY 天
+                            InvitSys.addBlacklist(senderPlayer, senderPlayer, InvitSys.MAX_RETRY_FAIL_BLOCK_DAY, 0, 0, 0);
+                            // 重置錯誤嘗試次數
+                            InvitSys.failList.remove(senderInfo.uuid);
 
-                            Event event = new InvitKickEvent(false, player, "抱歉，請勿亂猜驗證碼，冷靜個 " + InvitSys.MAX_RETRY_FAIL_BLOCK_DAY + " 天吧");
+                            // 踢掉玩家
+                            Event event = new InvitKickEvent(false, senderPlayer, "抱歉，請勿亂猜驗證碼，冷靜個 " + InvitSys.MAX_RETRY_FAIL_BLOCK_DAY + " 天吧");
                             Bukkit.getPluginManager().callEvent(event);
                         } else {
+                            // 如果不用踢掉，就儲存錯誤嘗試次數
                             InvitSys.failList.save();
                         }
                     }
                 } else if (args[0].equalsIgnoreCase("gencode")) {
 
-                    if (playerInfo.invitationQuota <= 0 && !player.isOp()) {
-                        Log.player(player, ChatColor.RED + "抱歉!你已經沒有邀請配額");
+                    // 取得下指令玩家資料
+                    PlayerInfo senderInfo = InvitSys.playerData.getPlayer(senderPlayer.getUniqueId());
+
+                    if (senderInfo.invitationQuota <= 0 && !senderPlayer.isOp()) {
+                        Log.player(senderPlayer, ChatColor.RED + "抱歉!你已經沒有邀請額度");
                         return true;
                     }
 
+                    // 產生邀請碼，內建重複重新產生機制
                     String invitCode = InvitSys.genInvitCode();
 
-                    Log.player(player, "邀請碼 ", ChatColor.GREEN, invitCode);
-                    Log.player(player, "請妥善保存");
+                    Log.player(senderPlayer, "邀請碼 ", ChatColor.GREEN, invitCode);
+                    Log.player(senderPlayer, "請妥善保存");
 
-                    if (!player.isOp()) {
-                        playerInfo.invitationQuota -= 1;
+                    // OP 產生邀請碼不會扣自身邀請碼額度
+                    if (!senderPlayer.isOp()) {
+                        senderInfo.invitationQuota -= 1;
                     }
-                    playerInfo.invitationCode.add(invitCode);
+                    // 將邀請碼紀錄在自己名下
+                    senderInfo.invitationCode.add(invitCode);
                     InvitSys.playerData.save();
                 }
             } else if (args[0].equalsIgnoreCase("verify")) {
@@ -110,99 +117,108 @@ public class PlayerCommand implements CommandExecutor {
             }
 
             if (args[0].equalsIgnoreCase("off")) {
-                if (player != null && !player.isOp()) {
-                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                if (senderPlayer != null && !senderPlayer.isOp()) {
+                    Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
                 }
 
                 InvitSys.enable = false;
-                Log.player(player, "邀請系統已經關閉", ChatColor.BLACK, "Off");
+                Log.player(senderPlayer, "邀請系統已經關閉", ChatColor.BLACK, "Off");
 
             } else if (args[0].equalsIgnoreCase("on")) {
-                if (player != null && !player.isOp()) {
-                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                if (senderPlayer != null && !senderPlayer.isOp()) {
+                    Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
                 }
 
                 InvitSys.enable = true;
-                Log.player(player, "邀請系統已經啟動", ChatColor.GREEN, "On");
+                Log.player(senderPlayer, "邀請系統已經啟動", ChatColor.GREEN, "On");
 
-            } else if (args[0].equalsIgnoreCase("set")) {
-                if (player != null && !player.isOp()) {
-                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+            } else if (args[0].equalsIgnoreCase("give")) {
+                if (senderPlayer != null && !senderPlayer.isOp()) {
+                    Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
                 }
 
                 if (args.length != 3) {
-                    showDefaultCmd(player);
+                    showDefaultCmd(senderPlayer);
                     return true;
                 }
 
                 String playerName = args[1];
                 int newQuota = Integer.parseInt(args[2]);
 
-                if (playerName.equalsIgnoreCase("all")) {
-                    Log.player(player, "給予所有線上使用者邀請配額");
+                if (playerName.equalsIgnoreCase("<all>")) {
+                    Log.player(senderPlayer, "給予所有線上使用者邀請額度");
 
+                    // 線上玩家 Only
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        PlayerInfo playerInfo = InvitSys.playerData.getPlayer(p.getUniqueId());
-                        if (playerInfo == null) {
+                        // 取得玩家資料
+                        PlayerInfo givePlayerInfo = InvitSys.playerData.getPlayer(p.getUniqueId());
+                        if (givePlayerInfo == null) {
+                            Log.player(senderPlayer, "查無此玩家", p.getDisplayName());
                             continue;
                         }
+                        int quotaBefore = givePlayerInfo.invitationQuota;
+                        // 給予額度
+                        givePlayerInfo.invitationQuota += newQuota;
+                        int quotaAfter = givePlayerInfo.invitationQuota;
 
-                        playerInfo.invitationQuota += newQuota;
+                        Log.player(senderPlayer, ChatColor.YELLOW + givePlayerInfo.name + ChatColor.WHITE + " 邀請額度從 " + quotaBefore + " 變更為 " + quotaAfter);
                     }
                 } else {
-                    Log.player(player, "給予使用者邀請配額", ChatColor.GREEN, playerName);
+                    Log.player(senderPlayer, "給予使用者邀請額度", ChatColor.GREEN, playerName);
 
-                    Player givePlayer = Bukkit.getPlayer(playerName);
-                    if (givePlayer == null) {
-                        Log.player(player, "查無此玩家", playerName);
+                    // 取得玩家資料
+                    PlayerInfo givePlayerInfo = InvitSys.playerData.getPlayer(playerName);
+                    if (givePlayerInfo == null) {
+                        Log.player(senderPlayer, "查無此玩家", playerName);
                         return true;
                     }
-                    PlayerInfo playerInfo = InvitSys.playerData.getPlayer(givePlayer.getUniqueId());
-                    if (playerInfo == null) {
-                        Log.player(player, "查無此玩家", playerName);
-                        return true;
-                    }
+                    int quotaBefore = givePlayerInfo.invitationQuota;
+                    // 給予額度
+                    givePlayerInfo.invitationQuota += newQuota;
+                    int quotaAfter = givePlayerInfo.invitationQuota;
 
-                    playerInfo.invitationQuota = newQuota;
+                    Log.player(senderPlayer, ChatColor.YELLOW + givePlayerInfo.name + ChatColor.WHITE + " 邀請額度從 " + quotaBefore + " 變更為 " + quotaAfter);
                 }
+                // 儲存資料
                 InvitSys.playerData.save();
-                Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
+                Log.player(senderPlayer, "執行狀態", ChatColor.GREEN, "完成");
 
             } else if (args[0].equalsIgnoreCase("info")) {
 
                 if (args.length != 2) {
-                    showDefaultCmd(player);
+                    showDefaultCmd(senderPlayer);
                     return true;
                 }
 
                 String playerName = args[1];
-                Log.player(player, "查詢使用者", ChatColor.GREEN, playerName);
+                Log.player(senderPlayer, "查詢使用者", ChatColor.GREEN, playerName);
 
+                // 取得玩家資料
                 PlayerInfo playerInfo = InvitSys.playerData.getPlayer(playerName);
                 if (playerInfo == null) {
-                    Log.player(player, "查無此玩家", playerName);
+                    Log.player(senderPlayer, "查無此玩家", playerName);
                     return true;
                 }
                 Player BukkitPlayer = Bukkit.getPlayer(playerInfo.uuid);
                 if (BukkitPlayer == null) {
-                    Log.player(player, "伺服器查無此玩家", playerName);
+                    Log.player(senderPlayer, "伺服器查無此玩家", playerName);
                     return true;
                 }
 
-                Log.player(player, "============================");
-                Log.player(player, "玩家名稱", playerInfo.name);
+                Log.player(senderPlayer, "============================");
+                Log.player(senderPlayer, "玩家名稱", playerInfo.name);
 
                 if (BukkitPlayer.isOp()) {
-                    Log.player(player, "驗證狀態", ChatColor.GOLD, "Operator");
-                    Log.player(player, "邀請配額", "∞");
+                    Log.player(senderPlayer, "驗證狀態", ChatColor.GOLD, "Operator");
+                    Log.player(senderPlayer, "邀請額度", "∞");
                 } else if (InvitSys.whitelist.contains(playerInfo.uuid)) {
-                    Log.player(player, "驗證狀態", ChatColor.GREEN, "通過驗證");
-                    Log.player(player, "邀請配額", playerInfo.invitationQuota + "");
+                    Log.player(senderPlayer, "驗證狀態", ChatColor.GREEN, "通過驗證");
+                    Log.player(senderPlayer, "邀請額度", playerInfo.invitationQuota + "");
                 } else if (InvitSys.blacklist.contains(playerInfo.uuid)) {
-                    Log.player(player, "驗證狀態", ChatColor.RED, "隔離中");
+                    Log.player(senderPlayer, "驗證狀態", ChatColor.RED, "隔離中");
 
                     Prisoner p = InvitSys.blacklist.getPrisoner(playerInfo.uuid);
 
@@ -219,12 +235,12 @@ public class PlayerCommand implements CommandExecutor {
 
                     String prisonTime = Util.timeToStr(day, hour, min, sec);
 
-                    Log.player(player, "刑期尚有", ChatColor.RED, prisonTime);
-                    Log.player(player, "邀請配額", playerInfo.invitationQuota + "");
+                    Log.player(senderPlayer, "刑期尚有", ChatColor.RED, prisonTime);
+                    Log.player(senderPlayer, "邀請額度", playerInfo.invitationQuota + "");
                 }
 
                 PlayerInfo parent = InvitSys.playerData.getPlayer(playerInfo.parentId);
-                Log.player(player, "推薦人", parent.name);
+                Log.player(senderPlayer, "推薦人", parent.name);
 
                 String kidStr = null;
                 for (UUID uuid : playerInfo.childId) {
@@ -235,44 +251,44 @@ public class PlayerCommand implements CommandExecutor {
                         kidStr += " " + childInfo.name;
                     }
                 }
-                Log.player(player, "推薦玩家: " + kidStr);
+                Log.player(senderPlayer, "推薦玩家: " + kidStr);
 
             } else if (args[0].equalsIgnoreCase("unblock")) {
-                if (player != null && !player.isOp()) {
-                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                if (senderPlayer != null && !senderPlayer.isOp()) {
+                    Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
                 }
 
                 if (args.length != 2) {
-                    showDefaultCmd(player);
+                    showDefaultCmd(senderPlayer);
                     return true;
                 }
 
                 String unblockPlayerName = args[1];
-                Log.player(player, "將使用者移出黑名單", ChatColor.GREEN, unblockPlayerName);
+                Log.player(senderPlayer, "將使用者移出黑名單", ChatColor.GREEN, unblockPlayerName);
 
                 PlayerInfo unblockPlayer = InvitSys.playerData.getPlayer(unblockPlayerName);
                 if (unblockPlayer == null) {
-                    Log.player(player, "查無此玩家", unblockPlayerName);
+                    Log.player(senderPlayer, "查無此玩家", unblockPlayerName);
                     return true;
                 }
                 InvitSys.blacklist.remove(unblockPlayer.uuid);
 
-                Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
+                Log.player(senderPlayer, "執行狀態", ChatColor.GREEN, "完成");
             } else if (args[0].equalsIgnoreCase("block")) {
 
-                if (player != null && !player.isOp()) {
-                    Log.player(player, ChatColor.RED + "抱歉!你沒有使用權限");
+                if (senderPlayer != null && !senderPlayer.isOp()) {
+                    Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
                 }
 
                 if (args.length < 2 || 6 < args.length) {
-                    showDefaultCmd(player);
+                    showDefaultCmd(senderPlayer);
                     return true;
                 }
 
                 String blockPlayerName = args[1];
-                Log.player(player, "將使用者加入黑名單", ChatColor.RED, blockPlayerName);
+                Log.player(senderPlayer, "將使用者加入黑名單", ChatColor.RED, blockPlayerName);
 
                 int blockDay = 0;
                 if (args.length >= 3) {
@@ -293,19 +309,23 @@ public class PlayerCommand implements CommandExecutor {
 
                 PlayerInfo playerInfo = InvitSys.playerData.getPlayer(blockPlayerName);
                 if (playerInfo == null) {
-                    Log.player(player, "查無此玩家", blockPlayerName);
+                    Log.player(senderPlayer, "查無此玩家", blockPlayerName);
                     return true;
                 }
                 Player blockPlayer = Bukkit.getPlayer(playerInfo.uuid);
                 if (blockPlayer == null) {
-                    Log.player(player, "伺服器查無此玩家", blockPlayerName);
+                    Log.player(senderPlayer, "伺服器查無此玩家", blockPlayerName);
                     return true;
                 }
 
-                InvitSys.addBlacklist(player, blockPlayer, blockDay, blockHour, blockMin, blockSec);
+                // 設定黑名單與時間
+                InvitSys.addBlacklist(senderPlayer, blockPlayer, blockDay, blockHour, blockMin, blockSec);
+                // 從錯誤嘗試清單中移除
                 InvitSys.failList.remove(playerInfo.uuid);
 
                 if (blockPlayer.isOnline()) {
+                    // 如果在線上踢掉
+                    // 順便告訴他刑期，很棒吧
                     String blockMsg;
                     if (blockDay == 0 && blockHour == 0 && blockMin == 0 && blockSec == 0) {
                         blockMsg = "抱歉，你已經被永久加入黑名單";
@@ -317,7 +337,7 @@ public class PlayerCommand implements CommandExecutor {
                     Event event = new InvitKickEvent(false, blockPlayer, blockMsg);
                     Bukkit.getPluginManager().callEvent(event);
                 }
-                Log.player(player, "執行狀態", ChatColor.GREEN, "完成");
+                Log.player(senderPlayer, "執行狀態", ChatColor.GREEN, "完成");
             }
         } catch (IOException e) {
             e.printStackTrace();

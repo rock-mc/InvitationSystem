@@ -29,7 +29,7 @@ public class CheckThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        FailVerifyPlayer failPlayer = InvitSys.failList.getFailVerifyPlayer(playerInfo.uuid);
+        FailVerifyPlayer failPlayer = InvitSys.failList.getPlayer(playerInfo.uuid);
         Log.player(player, "您尚有 " + ChatColor.RED + (InvitSys.MAX_RETRY_TIME - failPlayer.failTime) + ChatColor.WHITE + " 次輸入機會");
 
         long sleepTime = (long) (1000 * CHECK_TIME);
