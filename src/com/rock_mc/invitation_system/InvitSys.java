@@ -58,8 +58,8 @@ public class InvitSys {
         return true;
     }
 
-    public static boolean addBlacklist(Player player, int day, int hour, int min, int sec) throws IOException {
-        PlayerInfo playerInfo = playerData.getPlayer(player.getUniqueId());
+    public static boolean addBlacklist(Player player, Player blockPlayer, int day, int hour, int min, int sec) throws IOException {
+        PlayerInfo playerInfo = playerData.getPlayer(blockPlayer.getUniqueId());
 
         // 從白名單中移除
         if(whitelist.contains(playerInfo.uuid)){
@@ -77,8 +77,8 @@ public class InvitSys {
         return true;
     }
 
-    public static boolean addWhitelist(Player player, int invitQuota) throws IOException {
-        PlayerInfo playerInfo = playerData.getPlayer(player.getUniqueId());
+    public static boolean addWhitelist(Player player, Player addPlayer, int invitQuota) throws IOException {
+        PlayerInfo playerInfo = playerData.getPlayer(addPlayer.getUniqueId());
 
         // 從黑名單中移除
         if (blacklist.remove(playerInfo.uuid)){
@@ -89,7 +89,7 @@ public class InvitSys {
         return true;
     }
 
-    public static boolean addWhitelist(Player player, String invitCode) throws IOException {
+    public static boolean addWhitelist(Player player, Player addPlayer, String invitCode) throws IOException {
 
         PlayerInfo parent = null;
         for(UUID uuid : whitelist.playerList){
@@ -104,7 +104,7 @@ public class InvitSys {
             return false;
         }
 
-        PlayerInfo newPlayer = playerData.getPlayer(player.getUniqueId());
+        PlayerInfo newPlayer = playerData.getPlayer(addPlayer.getUniqueId());
         parent.childId.add(newPlayer.uuid);
         parent.invitationCode.remove(invitCode);
         newPlayer.parentId = parent.uuid;
@@ -114,5 +114,14 @@ public class InvitSys {
         whitelist.add(newPlayer.uuid);
 
         return true;
+    }
+    public static String genInvitCode(){
+
+        String result;
+        do {
+            result = Util.genUUID().substring(0, INVIT_CODE_LENGTH).toUpperCase();
+        } while (InvitSys.playerData.isRepeatCode(result));
+
+        return result;
     }
 }
