@@ -7,9 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.UUID;
 
 public class FailList {
@@ -34,7 +32,7 @@ public class FailList {
         playerList = new HashSet<>();
     }
 
-    public FailVerifyPlayer getFailVerifyPlayer(UUID uuid){
+    public FailVerifyPlayer getPlayer(UUID uuid){
         FailVerifyPlayer result = null;
         for(FailVerifyPlayer failVerifyPlayer : playerList){
             if(failVerifyPlayer.uuid.equals(uuid)){
@@ -47,7 +45,7 @@ public class FailList {
 
     public void add(UUID uuid) throws IOException {
 
-        FailVerifyPlayer currentPrisoner = getFailVerifyPlayer(uuid);
+        FailVerifyPlayer currentPrisoner = getPlayer(uuid);
         if(currentPrisoner != null) {
             return;
         }
@@ -85,6 +83,6 @@ public class FailList {
     }
 
     public boolean contains(UUID uuid) {
-        return getFailVerifyPlayer(uuid) != null;
+        return getPlayer(uuid) != null;
     }
 }
