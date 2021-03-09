@@ -49,6 +49,17 @@ public class Util {
         }
         return result;
     }
+    static String timeToStr(long expiryTime){
+        long day = expiryTime / Util.DAY;
+        expiryTime %= Util.DAY;
+        long hour = expiryTime / Util.HOUR;
+        expiryTime %= Util.HOUR;
+        long min = expiryTime / Util.MIN;
+        expiryTime %= Util.MIN;
+        long sec = expiryTime;
+
+        return timeToStr(day, hour, min, sec);
+    }
     static String timeToStr(long day, long hour, long min, long sec){
         String result = null;
         if(day > 0){
