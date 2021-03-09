@@ -17,12 +17,9 @@ public class CheckThread extends Thread {
 
     public void run() {
 
-        if(!InvitSys.enable){
-            Bukkit.getPluginManager().callEvent(new InvitJoinEvent(true, player, "歡迎 " + ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE + " 全新加入!"));
-            return;
-        }
+        PlayerInfo playerInfo = InvitSys.playerData.getPlayer(player.getUniqueId());
 
-        PlayerInfo playerInfo = new PlayerInfo(player, 0);
+        Log.player(player, playerInfo.name, ChatColor.RED, "請在 " + InvitSys.MAX_INPUT_CODE_TIME + " 秒內輸入邀請碼");
 
         try {
             InvitSys.failList.add(playerInfo.uuid);
@@ -30,7 +27,7 @@ public class CheckThread extends Thread {
             e.printStackTrace();
         }
         FailVerifyPlayer failPlayer = InvitSys.failList.getPlayer(playerInfo.uuid);
-        Log.player(player, "您尚有 " + ChatColor.RED + (InvitSys.MAX_RETRY_TIME - failPlayer.failTime) + ChatColor.WHITE + " 次輸入機會");
+        Log.player(player, "您有 " + ChatColor.RED + (InvitSys.MAX_RETRY_TIME - failPlayer.failTime) + ChatColor.WHITE + " 次輸入機會");
 
         long sleepTime = (long) (1000 * CHECK_TIME);
         for (int i = 0; i * CHECK_TIME < InvitSys.MAX_INPUT_CODE_TIME; i++) {

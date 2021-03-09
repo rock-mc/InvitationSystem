@@ -22,16 +22,21 @@ public class EventListener implements Listener {
         final String name = player.getDisplayName();
         final UUID uuid = player.getUniqueId();
 
+        // 進來就建立玩家資料
         InvitSys.createPlayerData(player);
 
+        // 如果元件關閉就不檢查是否在白名單中
         if (!InvitSys.enable) {
             return;
         }
 
+        // 檢查是否在白名單中
         if (InvitSys.whitelist.contains(uuid)) {
             Log.broadcast("通過邀請系統驗證", player.getDisplayName());
             return;
         }
+        // 如果不在白名單，檢查是否為 Op
+        // 給予禮遇自動加入白名單
         if (player.isOp()) {
             if (InvitSys.addWhitelist(player, player, InvitSys.DEFAULT_INVIT_QUOTA)) {
                 Log.player(player, "親愛的 OP 您已經自動被加入白名單");
@@ -40,10 +45,9 @@ public class EventListener implements Listener {
             }
             return;
         }
-        Log.player(player, name, ChatColor.RED, "請在 " + InvitSys.MAX_INPUT_CODE_TIME + " 秒內輸入邀請碼");
-
+        // 未通過驗證，凍結玩家
         InvitSys.freezePlayerSet.add(player.getUniqueId());
-
+        // 要求輸入邀請碼，啟動檢查線程
         new CheckThread(player).start();
     }
 
@@ -68,21 +72,24 @@ public class EventListener implements Listener {
         final String name = player.getDisplayName();
         final UUID uuid = player.getUniqueId();
 
+        // 如果不在黑名單可以先結束了
         if (!InvitSys.blacklist.contains(uuid)) {
             return;
         }
+        // 取得犯人資料
         Prisoner p = InvitSys.blacklist.getPrisoner(uuid);
         if (p.isExpiry()) {
+            // 如果刑期已經過了，那就放對方進來
             InvitSys.blacklist.remove(uuid);
             return;
         }
-        // in black list and not expiry
-        // BLOCK !!!!!!!
-
+        // 在黑名單中並且尚未過期
+        // 踢掉。
         String kickMsg;
         if (p.expiryTime == 0) {
             kickMsg = "抱歉!你被列為黑名單!";
         } else {
+            // 很好心的告訴犯人還有多久刑期
             kickMsg = "抱歉!你被列為黑名單!\n刑期尚有 ";
 
             long expiryTime = p.basicTime + p.expiryTime;
@@ -90,6 +97,7 @@ public class EventListener implements Listener {
             kickMsg += Util.timeToStr(expiryTime);
         }
 
+        // 踢。
         event.disallow(PlayerLoginEvent.Result.KICK_BANNED, kickMsg);
     }
 
@@ -99,10 +107,12 @@ public class EventListener implements Listener {
         final String name = player.getDisplayName();
         final UUID uuid = player.getUniqueId();
 
+        // 如果在白名單中就不擋掉對話
         if (InvitSys.whitelist.contains(uuid)) {
             return;
         }
 
+        // 尚未通過驗證檔掉對話
         event.setCancelled(true);
         Log.player(player, "因為您尚未通過驗證，因此訊息並未送出", event.getMessage());
     }
