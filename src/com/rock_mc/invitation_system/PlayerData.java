@@ -33,7 +33,7 @@ public class PlayerData {
         }
         return false;
     }
-    public PlayerInfo findPlayer(UUID uuid){
+    public PlayerInfo getPlayer(UUID uuid){
         PlayerInfo result = null;
 
         for(PlayerInfo p : playerList){
@@ -45,7 +45,7 @@ public class PlayerData {
 
         return result;
     }
-    public PlayerInfo findPlayer(String name){
+    public PlayerInfo getPlayer(String name){
         PlayerInfo result = null;
 
         for(PlayerInfo p : playerList){
@@ -68,16 +68,11 @@ public class PlayerData {
 
     public void add(PlayerInfo playerInfo) throws IOException {
 
-        PlayerInfo tempPlayer = findPlayer(playerInfo.uuid);
-        if(tempPlayer == null){
-            playerList.add(playerInfo);
+        PlayerInfo tempPlayer = getPlayer(playerInfo.uuid);
+        if(tempPlayer != null){
+            return;
         }
-        else{
-            if (tempPlayer.parentId == null) {
-                tempPlayer.parentId = playerInfo.parentId != null ? playerInfo.parentId : null;
-            }
-            tempPlayer.childId.addAll(playerInfo.childId);
-        }
+        playerList.add(playerInfo);
 
         save();
     }

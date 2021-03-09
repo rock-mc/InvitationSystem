@@ -83,7 +83,7 @@ public class PlayerCommand implements CommandExecutor {
                         }
                     }
                 } else if (args[0].equalsIgnoreCase("gencode")) {
-                    playerInfo = InvitSys.playerData.findPlayer(playerInfo.uuid);
+                    playerInfo = InvitSys.playerData.getPlayer(playerInfo.uuid);
 
                     if (playerInfo.invitationQuota <= 0 && !player.isOp()) {
                         Log.player(player, ChatColor.RED + "抱歉!你已經沒有邀請配額");
@@ -151,7 +151,7 @@ public class PlayerCommand implements CommandExecutor {
                     Log.player(player, "給予所有線上使用者邀請配額");
 
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        PlayerInfo playerInfo = InvitSys.playerData.findPlayer(p.getUniqueId());
+                        PlayerInfo playerInfo = InvitSys.playerData.getPlayer(p.getUniqueId());
                         if (playerInfo == null) {
                             continue;
                         }
@@ -170,7 +170,7 @@ public class PlayerCommand implements CommandExecutor {
                         Log.player(player, "查無此玩家", playerName);
                         return true;
                     }
-                    PlayerInfo playerInfo = InvitSys.playerData.findPlayer(givePlayer.getUniqueId());
+                    PlayerInfo playerInfo = InvitSys.playerData.getPlayer(givePlayer.getUniqueId());
                     if (playerInfo == null) {
                         Log.player(player, "查無此玩家", playerName);
                         return true;
@@ -233,12 +233,12 @@ public class PlayerCommand implements CommandExecutor {
                     Log.player(player, "邀請配額", playerInfo.invitationQuota + "");
                 }
 
-                PlayerInfo parent = InvitSys.playerData.findPlayer(playerInfo.parentId);
+                PlayerInfo parent = InvitSys.playerData.getPlayer(playerInfo.parentId);
                 Log.player(player, "推薦人", parent.name);
 
                 String kidStr = null;
                 for (UUID uuid : playerInfo.childId) {
-                    PlayerInfo childInfo = InvitSys.playerData.findPlayer(playerInfo.parentId);
+                    PlayerInfo childInfo = InvitSys.playerData.getPlayer(playerInfo.parentId);
                     if (kidStr == null) {
                         kidStr = childInfo.name;
                     } else {
@@ -261,7 +261,7 @@ public class PlayerCommand implements CommandExecutor {
                 String unblockPlayerName = args[1];
                 Log.player(player, "將使用者移出黑名單", ChatColor.GREEN, unblockPlayerName);
 
-                PlayerInfo unblockPlayer = InvitSys.playerData.findPlayer(unblockPlayerName);
+                PlayerInfo unblockPlayer = InvitSys.playerData.getPlayer(unblockPlayerName);
                 if (unblockPlayer == null) {
                     Log.player(player, "查無此玩家", unblockPlayerName);
                     return true;
@@ -301,7 +301,7 @@ public class PlayerCommand implements CommandExecutor {
                     blockSec = Integer.parseInt(args[5]);
                 }
 
-                PlayerInfo playerInfo = InvitSys.playerData.findPlayer(blockPlayerName);
+                PlayerInfo playerInfo = InvitSys.playerData.getPlayer(blockPlayerName);
                 if (playerInfo == null) {
                     Log.player(player, "查無此玩家", blockPlayerName);
                     return true;

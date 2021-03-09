@@ -63,7 +63,7 @@ public class InvitSys {
         // 設定使用者資料
         playerData.add(currentPlayer);
         // 取得使用者資料
-        currentPlayer = playerData.findPlayer(currentPlayer.uuid);
+        currentPlayer = playerData.getPlayer(currentPlayer.uuid);
         // 將邀請碼清空
         currentPlayer.resetCode();
         // 儲存
@@ -93,7 +93,7 @@ public class InvitSys {
 
         PlayerInfo parent = null;
         for(UUID uuid : whitelist.playerList){
-            PlayerInfo p = playerData.findPlayer(uuid);
+            PlayerInfo p = playerData.getPlayer(uuid);
             if(p.invitationCode.contains(invitCode)){
                 parent = p;
                 break;
