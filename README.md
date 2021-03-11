@@ -5,6 +5,10 @@
 - IDEA
 - zulu jdk 15
 
+## 支援
+- 文件在下方
+- 線上客服在 [磐石伺服器 discord 頻道](https://discord.com/invite/Kd3W7s8TUv)
+
 ## 指令
 ### invits <on/off>
 如果打開，附加元件只會讓在白名單上的玩家登入。  
