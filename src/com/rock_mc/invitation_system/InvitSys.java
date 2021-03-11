@@ -83,6 +83,12 @@ public class InvitSys {
             Log.player(player, "將 " + ChatColor.YELLOW + playerInfo.name + ChatColor.WHITE + " 從黑名單中移除");
         }
 
+        // 如果玩家的邀請額度就等於新的額度就不用動
+        if (playerInfo.invitationQuota != invitQuota){
+            playerInfo.invitationQuota = invitQuota;
+            playerData.save();
+        }
+
         whitelist.add(playerInfo.uuid);
         return true;
     }
