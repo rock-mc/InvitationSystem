@@ -41,10 +41,8 @@ public class Util {
 
         Random r = new Random();
 
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String alphabet = "0123456789";
         for (int i = 0; i < InvitSys.INVIT_CODE_LENGTH; i++) {
-//            System.out.println(alphabet.charAt(r.nextInt(alphabet.length())));
-
             result += alphabet.charAt(r.nextInt(alphabet.length()));
         }
         return result;
