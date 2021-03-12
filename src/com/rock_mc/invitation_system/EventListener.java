@@ -3,6 +3,7 @@ package com.rock_mc.invitation_system;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,14 +33,16 @@ public class EventListener implements Listener {
 
         // 檢查是否在白名單中
         if (InvitSys.whitelist.contains(uuid)) {
-            Log.broadcast("通過邀請系統驗證", player.getDisplayName());
+            Event joinEvent = new InvitJoinEvent(false, player, ChatColor.BOLD + player.getDisplayName() + ChatColor.WHITE + " 通過驗證");
+            Bukkit.getPluginManager().callEvent(joinEvent);
             return;
         }
         // 如果不在白名單，檢查是否為 Op
         // 給予禮遇自動加入白名單
         if (player.isOp()) {
             if (InvitSys.addWhitelist(player, player, InvitSys.DEFAULT_INVIT_QUOTA)) {
-                Log.player(player, "親愛的 OP 您已經自動被加入白名單");
+                Event joinEvent = new InvitJoinEvent(false, player, "親愛的 OP " + ChatColor.BOLD + name + "已經自動被加入白名單");
+                Bukkit.getPluginManager().callEvent(joinEvent);
             } else {
                 Log.player(player, "自動加入白名單失敗", ChatColor.RED, "不明原因");
             }
@@ -54,6 +57,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onInvitJoin(InvitJoinEvent event) {
         Log.broadcast(event.getMessage());
+        InvitSys.freezePlayerSet.remove(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
