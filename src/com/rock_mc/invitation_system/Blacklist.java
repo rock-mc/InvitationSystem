@@ -59,6 +59,7 @@ public class Blacklist {
         if (filePath == null) {
             return;
         }
+        Util.mkdir("plugins/" + InvitSys.APP_NAME);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json_str = gson.toJson(playerList);
