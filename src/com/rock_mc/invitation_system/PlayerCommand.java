@@ -2,6 +2,7 @@ package com.rock_mc.invitation_system;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -202,14 +203,11 @@ public class PlayerCommand implements CommandExecutor {
                     Log.player(senderPlayer, "查無此玩家", playerName);
                     return true;
                 }
-                Player BukkitPlayer = Bukkit.getPlayer(playerInfo.uuid);
+                OfflinePlayer BukkitPlayer = Bukkit.getOfflinePlayer(playerInfo.uuid);
                 if (BukkitPlayer == null) {
                     Log.player(senderPlayer, "伺服器查無此玩家", playerName);
                     return true;
                 }
-
-                Log.player(senderPlayer, "============================");
-                Log.player(senderPlayer, "玩家名稱", playerInfo.name);
 
                 if (BukkitPlayer.isOp()) {
                     Log.player(senderPlayer, "驗證狀態", ChatColor.GOLD, "Operator");
@@ -240,7 +238,9 @@ public class PlayerCommand implements CommandExecutor {
                 }
 
                 PlayerInfo parent = InvitSys.playerData.getPlayer(playerInfo.parentId);
-                Log.player(senderPlayer, "推薦人", parent.name);
+                if (parent != null){
+                    Log.player(senderPlayer, "推薦人", parent.name);
+                }
 
                 String kidStr = null;
                 for (UUID uuid : playerInfo.childId) {
