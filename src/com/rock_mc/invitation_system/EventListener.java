@@ -7,6 +7,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
 
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class EventListener implements Listener {
         // 給予禮遇自動加入白名單
         if (player.isOp()) {
             if (InvitSys.addWhitelist(player, player, InvitSys.DEFAULT_INVIT_QUOTA)) {
-                Event joinEvent = new InvitJoinEvent(false, player, "親愛的 OP " + ChatColor.BOLD + name + "已經自動被加入白名單");
+                Event joinEvent = new InvitJoinEvent(false, player, "親愛的 OP " + ChatColor.BOLD + name + ChatColor.WHITE + " 已經自動被加入白名單");
                 Bukkit.getPluginManager().callEvent(joinEvent);
             } else {
                 Log.player(player, "自動加入白名單失敗", ChatColor.RED, "不明原因");
@@ -128,5 +130,27 @@ public class EventListener implements Listener {
             return;
         }
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent e) {
+        if (e.getEntity() instanceof Player) {
+            Player player = (Player) e.getEntity();
+            if (!InvitSys.freezePlayerSet.contains(player.getUniqueId())) {
+                return;
+            }
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageByEntityEvent e) {
+        if (e.getDamager() instanceof Player) {
+            Player player = (Player) e.getEntity();
+            if (!InvitSys.freezePlayerSet.contains(player.getUniqueId())) {
+                return;
+            }
+            e.setCancelled(true);
+        }
     }
 }
