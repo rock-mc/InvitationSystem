@@ -11,10 +11,26 @@ commands:
     usage: /invits
     default: true
   invits verify:
-    description: Input the invitation code to verify user
+    description: Input the invitation code to verify player
     usage: /invits verify <invitation code>
     default: true
   invits gencode:
-    description: Generate invitation code and reduce a quota
+    description: Generate invitation code and reduce a quota of the player
     usage: /invits gencode
     default: true
+  invits info:
+    description: Show the the state of Invitation System to the player
+    usage: /invits info
+    default: true
+  invits give:
+    description: Give invitation code quota to the player
+    usage: /invits give
+    default: op
+  invits block:
+    description: Block the player
+    usage: /invits block day hour min sec
+    default: op
+  invits unblock:
+    description: Unblock the player
+    usage: /invits block
+    default: op
