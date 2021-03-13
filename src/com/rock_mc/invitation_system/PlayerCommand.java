@@ -312,7 +312,7 @@ public class PlayerCommand implements CommandExecutor {
                     Log.player(senderPlayer, "查無此玩家", blockPlayerName);
                     return true;
                 }
-                Player blockPlayer = Bukkit.getPlayer(playerInfo.uuid);
+                OfflinePlayer blockPlayer = Bukkit.getOfflinePlayer(playerInfo.uuid);
                 if (blockPlayer == null) {
                     Log.player(senderPlayer, "伺服器查無此玩家", blockPlayerName);
                     return true;
@@ -334,7 +334,9 @@ public class PlayerCommand implements CommandExecutor {
                         blockMsg += Util.timeToStr(blockDay, blockHour, blockMin, blockSec);
                     }
 
-                    Event event = new InvitKickEvent(false, blockPlayer, blockMsg);
+                    Player kickPlayer = Bukkit.getPlayer(playerInfo.uuid);
+
+                    Event event = new InvitKickEvent(false, kickPlayer, blockMsg);
                     Bukkit.getPluginManager().callEvent(event);
                 }
                 Log.player(senderPlayer, "執行狀態", ChatColor.GREEN, "完成");

@@ -1,6 +1,7 @@
 package com.rock_mc.invitation_system;
 
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -58,7 +59,7 @@ public class InvitSys {
         return true;
     }
 
-    public static boolean addBlacklist(Player player, Player blockPlayer, int day, int hour, int min, int sec) throws IOException {
+    public static boolean addBlacklist(Player player, OfflinePlayer blockPlayer, int day, int hour, int min, int sec) throws IOException {
         PlayerInfo playerInfo = playerData.getPlayer(blockPlayer.getUniqueId());
 
         // 不從白名單中剔除，保留驗證結果
@@ -70,12 +71,10 @@ public class InvitSys {
         }
 
         blacklist.add(playerInfo.uuid, day, hour, min, sec);
-        Log.player(player, "將 " + ChatColor.YELLOW + playerInfo.name + ChatColor.WHITE + " 加入至黑名單");
-        Log.player(player, "服刑時間", Util.timeToStr(day, hour, min, sec));
         return true;
     }
 
-    public static boolean addWhitelist(Player player, Player addPlayer, int invitQuota) throws IOException {
+    public static boolean addWhitelist(Player player, OfflinePlayer addPlayer, int invitQuota) throws IOException {
         PlayerInfo playerInfo = playerData.getPlayer(addPlayer.getUniqueId());
 
         // 從黑名單中移除
@@ -93,7 +92,7 @@ public class InvitSys {
         return true;
     }
 
-    public static boolean addWhitelist(Player player, Player addPlayer, String invitCode) throws IOException {
+    public static boolean addWhitelist(Player player, OfflinePlayer addPlayer, String invitCode) throws IOException {
 
         // 找到是誰邀請 addPlayer
         PlayerInfo parent = null;
