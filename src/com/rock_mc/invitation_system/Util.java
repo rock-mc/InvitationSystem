@@ -87,6 +87,9 @@ public class Util {
                 result += " " + sec + " 秒";
             }
         }
+        if (result == null){
+            result = "∞";
+        }
         return result;
     }
 }
