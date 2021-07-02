@@ -112,15 +112,25 @@ public class EventListener implements Listener {
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
         final UUID uuid = player.getUniqueId();
+        final String msg = event.getMessage();
 
-        // 如果在白名單中就不擋掉對話
+        // 如果在白名單中就讓事件通過
         if (InvitSys.whitelist.contains(uuid)) {
             return;
+        }
+        // 如果是註冊指令就讓事件通過
+        if (msg.startsWith("/invits verify") && msg.length() == 21){
+            String [] MsgList = msg.split(" ");
+            String VerifyCode = MsgList[MsgList.length - 1];
+            try {
+                Integer.parseInt(VerifyCode);
+                return;
+            }catch (NumberFormatException e) {}
         }
 
         // 尚未通過驗證檔掉對話
         event.setCancelled(true);
-        Log.player(player, "因為您尚未通過驗證，因此訊息並未送出", event.getMessage());
+        Log.player(player, "因為您尚未通過驗證，因此訊息並未送出", msg);
     }
 
     @EventHandler
