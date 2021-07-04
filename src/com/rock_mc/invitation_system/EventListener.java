@@ -118,15 +118,6 @@ public class EventListener implements Listener {
         if (InvitSys.whitelist.contains(uuid)) {
             return;
         }
-        // 如果是註冊指令就讓事件通過
-        if (msg.startsWith("/invits verify") && msg.length() == 21){
-            String [] MsgList = msg.split(" ");
-            String VerifyCode = MsgList[MsgList.length - 1];
-            try {
-                Integer.parseInt(VerifyCode);
-                return;
-            }catch (NumberFormatException e) {}
-        }
 
         // 尚未通過驗證檔掉對話
         event.setCancelled(true);
