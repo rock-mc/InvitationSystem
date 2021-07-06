@@ -146,7 +146,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) {
+        if (e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
             if (!InvitSys.freezePlayerSet.contains(player.getUniqueId())) {
                 return;
