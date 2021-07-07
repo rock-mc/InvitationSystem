@@ -189,23 +189,30 @@ public class PlayerCommand implements CommandExecutor {
 
             } else if (args[0].equalsIgnoreCase("info")) {
 
-                if (args.length != 2) {
+                PlayerInfo playerInfo = null;
+                if(args.length == 2) {
+                    String playerName = args[1];
+
+                    Log.player(senderPlayer, "查詢使用者", ChatColor.GREEN, playerName);
+
+                    // 取得玩家資料
+                    playerInfo = InvitSys.playerData.getPlayer(playerName);
+                    if (playerInfo == null) {
+                        Log.player(senderPlayer, "查無此玩家", playerName);
+                        return true;
+                    }
+                }
+                else if(args.length == 1){
+                    playerInfo = InvitSys.playerData.getPlayer(senderPlayer.getUniqueId());
+                }
+                else{
                     showDefaultCmd(senderPlayer);
                     return true;
                 }
 
-                String playerName = args[1];
-                Log.player(senderPlayer, "查詢使用者", ChatColor.GREEN, playerName);
-
-                // 取得玩家資料
-                PlayerInfo playerInfo = InvitSys.playerData.getPlayer(playerName);
-                if (playerInfo == null) {
-                    Log.player(senderPlayer, "查無此玩家", playerName);
-                    return true;
-                }
                 OfflinePlayer BukkitPlayer = Bukkit.getOfflinePlayer(playerInfo.uuid);
                 if (BukkitPlayer == null) {
-                    Log.player(senderPlayer, "伺服器查無此玩家", playerName);
+                    Log.player(senderPlayer, "伺服器查無此玩家", args[1]);
                     return true;
                 }
 
@@ -244,14 +251,24 @@ public class PlayerCommand implements CommandExecutor {
 
                 String kidStr = null;
                 for (UUID uuid : playerInfo.childId) {
-                    PlayerInfo childInfo = InvitSys.playerData.getPlayer(playerInfo.parentId);
+                    PlayerInfo childInfo = InvitSys.playerData.getPlayer(uuid);
                     if (kidStr == null) {
                         kidStr = childInfo.name;
                     } else {
-                        kidStr += " " + childInfo.name;
+                        kidStr += ", " + childInfo.name;
                     }
                 }
                 Log.player(senderPlayer, "推薦玩家: " + kidStr);
+
+                String UnusedCodeStr = null;
+                for (String UnusedCode : playerInfo.invitationCode){
+                    if (UnusedCodeStr == null) {
+                        UnusedCodeStr = UnusedCode;
+                    } else {
+                        UnusedCodeStr += ", " + UnusedCode;
+                    }
+                }
+                Log.player(senderPlayer, "待使用驗證碼: " + (UnusedCodeStr == null ? "無" : UnusedCodeStr));
 
             } else if (args[0].equalsIgnoreCase("unblock")) {
                 if (senderPlayer != null && !senderPlayer.isOp()) {
