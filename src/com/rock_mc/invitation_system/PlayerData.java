@@ -68,6 +68,12 @@ public class PlayerData {
 
     public void add(PlayerInfo playerInfo) throws IOException {
         if (contains(playerInfo.uuid)){
+            PlayerInfo currentPlayerInfo = getPlayer(playerInfo.uuid);
+            if(currentPlayerInfo.name.equals(playerInfo.name)){
+                return;
+            }
+            currentPlayerInfo.name = playerInfo.name;
+            save();
             return;
         }
 
