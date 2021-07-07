@@ -11,7 +11,7 @@ public class Log {
     private static String LOG_PREFIX = "[" + ChatColor.GOLD + InvitSys.APP_NAME + ChatColor.WHITE + "] ";
 
     static String arrayToString(String[] postfix_msg) {
-        String result = null;
+        String result = "";
 
         if (null == postfix_msg) {
             return result;
