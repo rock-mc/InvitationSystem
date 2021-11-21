@@ -2,11 +2,14 @@ package com.rock_mc.invitation_system;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
@@ -19,7 +22,7 @@ public class EventListener implements Listener {
     private final float DEFAULT_WALK_SPEED = 0.2F;
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
+    public synchronized void onPlayerJoin(PlayerJoinEvent event) throws IOException {
 
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
@@ -73,7 +76,7 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) throws IOException {
+    public synchronized void onPlayerLogin(PlayerLoginEvent event) throws IOException {
         final Player player = event.getPlayer();
         final String name = player.getDisplayName();
         final UUID uuid = player.getUniqueId();
@@ -128,6 +131,11 @@ public class EventListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (!InvitSys.freezePlayerSet.contains(player.getUniqueId())) {
+            return;
+        }
+        LivingEntity livingEntity = player;
+        if(!livingEntity.isOnGround()){
+//            Log.player(player, "is not on ground");
             return;
         }
         event.setCancelled(true);
