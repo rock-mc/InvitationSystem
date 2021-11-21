@@ -1,7 +1,7 @@
 name: InvitationSystem
 main: com.rock_mc.invitation_system.Main
-version: 0.0.0
-api-version: 1.16
+version: 0.0.6
+api-version: 1.17
 description: A minecraft plugin for invitation only
 author: CodingMan
 prefix: InvitSys

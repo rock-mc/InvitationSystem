@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,16 +17,15 @@ public class PlayerCommand implements CommandExecutor {
     private void showDefaultCmd(Player player) {
         if (player != null) {
             PlayerInfo playerInfo = new PlayerInfo(player);
-            if (player.isOp()){
-                Log.player(player, "verify | gencode | block | unblock | give");
-            }
-            else if (InvitSys.whitelist.contains(playerInfo.uuid)) {
+            if (player.isOp()) {
+                Log.player(player, "verify | gencode | block | unblock | give | list");
+            } else if (InvitSys.whitelist.contains(playerInfo.uuid)) {
                 Log.player(player, "gencode");
             } else {
                 Log.player(player, "verify <invttation code>");
             }
         } else {
-            Log.player(player, "verify | gencode | block | unblock | give");
+            Log.player(player, "verify | gencode | block | unblock | give | list");
         }
     }
 
@@ -111,13 +111,13 @@ public class PlayerCommand implements CommandExecutor {
                     senderInfo.invitationCode.add(invitCode);
                     InvitSys.playerData.save();
                 }
+            } else if (args.length == 0) {
+                Log.server("請詳讀說明手冊");
             } else if (args[0].equalsIgnoreCase("verify")) {
                 Log.server("請在遊戲中下指令");
             } else if (args[0].equalsIgnoreCase("gencode")) {
                 Log.server("請在遊戲中下指令");
-            }
-
-            if (args[0].equalsIgnoreCase("off")) {
+            } else if (args[0].equalsIgnoreCase("off")) {
                 if (senderPlayer != null && !senderPlayer.isOp()) {
                     Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
@@ -190,7 +190,7 @@ public class PlayerCommand implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("info")) {
 
                 PlayerInfo playerInfo = null;
-                if(args.length == 2) {
+                if (args.length == 2) {
                     String playerName = args[1];
 
                     Log.player(senderPlayer, "查詢使用者", ChatColor.GREEN, playerName);
@@ -201,11 +201,9 @@ public class PlayerCommand implements CommandExecutor {
                         Log.player(senderPlayer, "查無此玩家", playerName);
                         return true;
                     }
-                }
-                else if(args.length == 1){
+                } else if (args.length == 1) {
                     playerInfo = InvitSys.playerData.getPlayer(senderPlayer.getUniqueId());
-                }
-                else{
+                } else {
                     showDefaultCmd(senderPlayer);
                     return true;
                 }
@@ -245,7 +243,7 @@ public class PlayerCommand implements CommandExecutor {
                 }
 
                 PlayerInfo parent = InvitSys.playerData.getPlayer(playerInfo.parentId);
-                if (parent != null){
+                if (parent != null) {
                     Log.player(senderPlayer, "推薦人", parent.name);
                 }
 
@@ -260,15 +258,17 @@ public class PlayerCommand implements CommandExecutor {
                 }
                 Log.player(senderPlayer, "推薦玩家: " + kidStr);
 
-                String UnusedCodeStr = null;
-                for (String UnusedCode : playerInfo.invitationCode){
-                    if (UnusedCodeStr == null) {
-                        UnusedCodeStr = UnusedCode;
-                    } else {
-                        UnusedCodeStr += ", " + UnusedCode;
+                if (senderPlayer.isOp() || BukkitPlayer.getPlayer().getUniqueId().equals(senderPlayer.getUniqueId())) {
+                    String UnusedCodeStr = null;
+                    for (String UnusedCode : playerInfo.invitationCode) {
+                        if (UnusedCodeStr == null) {
+                            UnusedCodeStr = UnusedCode;
+                        } else {
+                            UnusedCodeStr += ", " + UnusedCode;
+                        }
                     }
+                    Log.player(senderPlayer, "待使用驗證碼: " + (UnusedCodeStr == null ? "無" : UnusedCodeStr));
                 }
-                Log.player(senderPlayer, "待使用驗證碼: " + (UnusedCodeStr == null ? "無" : UnusedCodeStr));
 
             } else if (args[0].equalsIgnoreCase("unblock")) {
                 if (senderPlayer != null && !senderPlayer.isOp()) {
@@ -356,9 +356,53 @@ public class PlayerCommand implements CommandExecutor {
                     Event event = new InvitKickEvent(false, kickPlayer, blockMsg);
                     Bukkit.getPluginManager().callEvent(event);
                 }
+
                 Log.player(senderPlayer, "執行狀態", ChatColor.GREEN, "完成");
+            } else if (args[0].equalsIgnoreCase("list")) {
+                if (senderPlayer != null && !senderPlayer.isOp()) {
+                    Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
+                    return true;
+                }
+                if (2 < args.length) {
+                    showDefaultCmd(senderPlayer);
+                    return true;
+                }
+
+                if (args.length == 2) {
+                    if (!args[1].equalsIgnoreCase("whitelist") && !args[1].equalsIgnoreCase("blocklist")) {
+
+                    }
+                }
+
+                if (args.length == 1 || args[1].equalsIgnoreCase("whitelist")) {
+                    String resultStr = null;
+                    for (UUID playerUUID : InvitSys.whitelist.playerList) {
+                        if (resultStr == null) {
+                            resultStr = InvitSys.playerData.getPlayer(playerUUID).name;
+                        } else {
+                            resultStr += ", " + InvitSys.playerData.getPlayer(playerUUID).name;
+                        }
+                    }
+                    Log.player(senderPlayer, "白名單: ", resultStr == null ? "無" : resultStr);
+                }
+                if (args.length == 1 || args[1].equalsIgnoreCase("blocklist")) {
+                    String resultStr = null;
+                    for (Prisoner prisoner : InvitSys.blacklist.playerList) {
+                        if (resultStr == null) {
+                            resultStr = InvitSys.playerData.getPlayer(prisoner.uuid).name;
+                        } else {
+                            resultStr += ", " + InvitSys.playerData.getPlayer(prisoner.uuid).name;
+                        }
+                    }
+                    Log.player(senderPlayer, "黑名單: ", resultStr == null ? "無" : resultStr);
+                }
+
+            } else {
+                showDefaultCmd(senderPlayer);
+                return true;
             }
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             e.printStackTrace();
         }
         return true;
