@@ -92,7 +92,7 @@ public class PlayerCommand implements CommandExecutor {
                     // 取得下指令玩家資料
                     PlayerInfo senderInfo = InvitSys.playerData.getPlayer(senderPlayer.getUniqueId());
 
-                    if (senderInfo.invitationQuota <= 0 && !senderPlayer.isOp()) {
+                    if (senderInfo.invitationQuota <= 0 && !senderPlayer.hasPermission("invits.gencode")) {
                         Log.player(senderPlayer, ChatColor.RED + "抱歉!你已經沒有邀請額度");
                         return true;
                     }

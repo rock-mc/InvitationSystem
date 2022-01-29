@@ -1,6 +1,6 @@
 name: InvitationSystem
 main: com.rock_mc.invitation_system.Main
-version: 0.0.6
+version: 0.0.7
 api-version: 1.17
 description: A minecraft plugin for invitation only
 author: CodingMan
@@ -33,4 +33,13 @@ commands:
   invits unblock:
     description: Unblock the player
     usage: /invits block
+    default: op
+
+permissions:
+  invits.*:
+    description: Gives access to all commands
+    children:
+      invits.gencode: true
+  invits.gencode:
+    description: Allows you to generate invitation code
     default: op

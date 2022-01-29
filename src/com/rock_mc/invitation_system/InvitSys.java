@@ -12,7 +12,7 @@ import java.util.UUID;
 public class InvitSys {
 
     public static final String APP_NAME = "InvitSys";
-    public static final int DEFAULT_INVIT_QUOTA = 2;
+    public static final int DEFAULT_INVIT_QUOTA = 0;
     public static final int MAX_INPUT_CODE_TIME = 60;
     public static final int INVIT_CODE_LENGTH = 6;
     public static final int MAX_RETRY_TIME = 5;
