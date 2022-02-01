@@ -89,12 +89,15 @@ public class PlayerCommand implements CommandExecutor {
                     }
                 } else if (args[0].equalsIgnoreCase("gencode")) {
 
-                    // 取得下指令玩家資料
-                    PlayerInfo senderInfo = InvitSys.playerData.getPlayer(senderPlayer.getUniqueId());
+                    PlayerInfo senderInfo = null;
+                    if (senderPlayer != null) {
+                        // 取得下指令玩家資料
+                        senderInfo = InvitSys.playerData.getPlayer(senderPlayer.getUniqueId());
 
-                    if (senderInfo.invitationQuota <= 0 && !senderPlayer.hasPermission("invits.gencode")) {
-                        Log.player(senderPlayer, ChatColor.RED + "抱歉!你已經沒有邀請額度");
-                        return true;
+                        if (senderInfo.invitationQuota <= 0 && !senderPlayer.hasPermission("invits.gencode")) {
+                            Log.player(senderPlayer, ChatColor.RED + "抱歉!你已經沒有邀請額度");
+                            return true;
+                        }
                     }
 
                     // 產生邀請碼，內建重複重新產生機制
@@ -103,13 +106,17 @@ public class PlayerCommand implements CommandExecutor {
                     Log.player(senderPlayer, "邀請碼 ", ChatColor.GREEN, invitCode);
                     Log.player(senderPlayer, "請妥善保存");
 
-                    // OP 產生邀請碼不會扣自身邀請碼額度
-                    if (!senderPlayer.isOp()) {
-                        senderInfo.invitationQuota -= 1;
+                    if (senderPlayer != null) {
+
+                        // OP 產生邀請碼不會扣自身邀請碼額度
+                        if (!senderPlayer.isOp() && !senderPlayer.hasPermission("invits.gencode")) {
+                            senderInfo.invitationQuota -= 1;
+                        }
+                        // 將邀請碼紀錄在自己名下
+                        senderInfo.invitationCode.add(invitCode);
+                        InvitSys.playerData.save();
                     }
-                    // 將邀請碼紀錄在自己名下
-                    senderInfo.invitationCode.add(invitCode);
-                    InvitSys.playerData.save();
+
                 }
             } else if (args.length == 0) {
                 Log.server("請詳讀說明手冊");
@@ -117,7 +124,9 @@ public class PlayerCommand implements CommandExecutor {
                 Log.server("請在遊戲中下指令");
             } else if (args[0].equalsIgnoreCase("gencode")) {
                 Log.server("請在遊戲中下指令");
-            } else if (args[0].equalsIgnoreCase("off")) {
+            }
+
+            if (args[0].equalsIgnoreCase("off")) {
                 if (senderPlayer != null && !senderPlayer.isOp()) {
                     Log.player(senderPlayer, ChatColor.RED + "抱歉!你沒有使用權限");
                     return true;
@@ -258,16 +267,18 @@ public class PlayerCommand implements CommandExecutor {
                 }
                 Log.player(senderPlayer, "推薦玩家: " + kidStr);
 
-                if (senderPlayer.isOp() || BukkitPlayer.getPlayer().getUniqueId().equals(senderPlayer.getUniqueId())) {
-                    String UnusedCodeStr = null;
-                    for (String UnusedCode : playerInfo.invitationCode) {
-                        if (UnusedCodeStr == null) {
-                            UnusedCodeStr = UnusedCode;
-                        } else {
-                            UnusedCodeStr += ", " + UnusedCode;
+                if (senderPlayer != null ) {
+                    if (senderPlayer.isOp() || BukkitPlayer.getPlayer().getUniqueId().equals(senderPlayer.getUniqueId())) {
+                        String UnusedCodeStr = null;
+                        for (String UnusedCode : playerInfo.invitationCode) {
+                            if (UnusedCodeStr == null) {
+                                UnusedCodeStr = UnusedCode;
+                            } else {
+                                UnusedCodeStr += ", " + UnusedCode;
+                            }
                         }
+                        Log.player(senderPlayer, "待使用驗證碼: " + (UnusedCodeStr == null ? "無" : UnusedCodeStr));
                     }
-                    Log.player(senderPlayer, "待使用驗證碼: " + (UnusedCodeStr == null ? "無" : UnusedCodeStr));
                 }
 
             } else if (args[0].equalsIgnoreCase("unblock")) {
